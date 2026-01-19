@@ -14,7 +14,7 @@ class InvoiceConfirmScreen extends StatefulWidget {
   final DateTime date;
   final String transport;
   final String lrNo;
-  final double igst;
+  final double percent;
   final GstTransactionType gstType;
   final Customer customer;
   final List<InvoiceItem> items;
@@ -26,7 +26,7 @@ class InvoiceConfirmScreen extends StatefulWidget {
     required this.date,
     required this.transport,
     required this.lrNo,
-    required this.igst,
+    required this.percent,
     required this.gstType,
     required this.customer,
     required this.items,
@@ -44,7 +44,7 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
   }
 
   double _calculateIGST() {
-    return _calculateSubtotal() * (widget.igst / 100);
+    return _calculateSubtotal() * (widget.percent / 100);
   }
 
   double _calculateGrandTotal() {
@@ -71,7 +71,7 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
       transport: widget.transport,
       lrNo: widget.lrNo,
       items: widget.items,
-      igst: widget.igst,
+      percent: widget.percent,
       gstType: widget.gstType,
     );
 
@@ -163,7 +163,7 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
     final subtotal = _calculateSubtotal();
     final bool isInterState = widget.gstType == GstTransactionType.interState;
 
-    final double gstPercent = widget.igst;
+    final double gstPercent = widget.percent;
 
     double cgst = 0.0;
     double sgst = 0.0;
@@ -231,7 +231,7 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.receipt_long, color: Colors.blue),
+                        const Icon(Icons.receipt_long, color: Colors.black),
                         const SizedBox(width: 12),
                         const Text(
                           'Invoice Details',
@@ -465,7 +465,7 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
                                 '${index + 1}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.blue,
+                                  color: Colors.black,
                                 ),
                               ),
                             ),
@@ -713,7 +713,7 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-              color: isActive ? Colors.blue : Colors.grey.shade300,
+              color: isActive ? Colors.black : Colors.grey.shade300,
               shape: BoxShape.circle,
             ),
             child: Center(
@@ -734,7 +734,7 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
             label,
             style: TextStyle(
               fontSize: 10,
-              color: isActive ? Colors.blue : Colors.grey.shade600,
+              color: isActive ? Colors.black : Colors.grey.shade600,
               fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
             ),
           ),
@@ -748,7 +748,7 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
       child: Container(
         height: 2,
         margin: const EdgeInsets.only(bottom: 20),
-        color: isActive ? Colors.blue : Colors.grey.shade300,
+        color: isActive ? Colors.black : Colors.grey.shade300,
       ),
     );
   }

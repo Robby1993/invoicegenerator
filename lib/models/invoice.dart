@@ -12,7 +12,7 @@ class Invoice {
   final String transport;
   final String lrNo;
   final List<InvoiceItem> items;
-  final double igst;
+  final double percent;
   final GstTransactionType gstType;
 
   Invoice({
@@ -24,14 +24,14 @@ class Invoice {
     required this.transport,
     required this.lrNo,
     required this.items,
-    this.igst = 0.0,
+    this.percent = 0.0,
     required this.gstType,
   });
 
   double get subtotal => items.fold(0.0, (sum, item) => sum + item.total);
   double get cgst => subtotal * 0.09;
   double get sgst => subtotal * 0.09;
-  double get total => subtotal + cgst + sgst + igst;
+  //double get total => subtotal + cgst + sgst + igst;
 
   String get formattedDate => DateFormat('dd/MM/yyyy').format(date);
 }

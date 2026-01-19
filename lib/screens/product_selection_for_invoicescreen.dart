@@ -13,7 +13,7 @@ class ProductSelectionForInvoiceScreen extends StatefulWidget {
   final DateTime date;
   final String transport;
   final String lrNo;
-  final double igst;
+  final double percent;
   final GstTransactionType gstType;
   final Customer customer;
 
@@ -24,7 +24,7 @@ class ProductSelectionForInvoiceScreen extends StatefulWidget {
     required this.date,
     required this.transport,
     required this.lrNo,
-    required this.igst,
+    required this.percent,
     required this.customer,
     required this.gstType,
   });
@@ -207,7 +207,7 @@ class _ProductSelectionForInvoiceScreenState
           date: widget.date,
           transport: widget.transport,
           lrNo: widget.lrNo,
-          igst: widget.igst,
+          percent: widget.percent,
           gstType: widget.gstType,
           customer: widget.customer,
           items: _selectedItems,
@@ -351,7 +351,7 @@ class _ProductSelectionForInvoiceScreenState
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.shopping_cart, color: Colors.blue),
+                  const Icon(Icons.shopping_cart, color: Colors.black),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -465,7 +465,7 @@ class _ProductSelectionForInvoiceScreenState
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                         side: isSelected
-                            ? const BorderSide(color: Colors.blue, width: 2)
+                            ? const BorderSide(color: Colors.black, width: 2)
                             : BorderSide.none,
                       ),
                       child: InkWell(
@@ -484,7 +484,7 @@ class _ProductSelectionForInvoiceScreenState
                                 ),
                                 child: const Icon(
                                   Icons.inventory_2_outlined,
-                                  color: Colors.blue,
+                                  color: Colors.black,
                                   size: 28,
                                 ),
                               ),
@@ -523,7 +523,7 @@ class _ProductSelectionForInvoiceScreenState
                               if (isSelected)
                                 const Icon(
                                   Icons.check_circle,
-                                  color: Colors.blue,
+                                  color: Colors.black,
                                   size: 28,
                                 )
                               else
@@ -561,7 +561,7 @@ class _ProductSelectionForInvoiceScreenState
             onPressed: _selectedItems.isEmpty ? null : _proceedToConfirm,
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
-              backgroundColor: Colors.blue,
+              backgroundColor: Colors.black,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -675,7 +675,7 @@ class _ProductSelectionForInvoiceScreenState
                               _editItem(index);
                             },
                             icon: const Icon(Icons.edit_outlined),
-                            color: Colors.blue,
+                            color: Colors.black,
                           ),
                           IconButton(
                             onPressed: () {
@@ -737,7 +737,7 @@ class _ProductSelectionForInvoiceScreenState
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-              color: isActive ? Colors.blue : Colors.grey.shade300,
+              color: isActive ? Colors.black : Colors.grey.shade300,
               shape: BoxShape.circle,
             ),
             child: Center(
@@ -756,7 +756,7 @@ class _ProductSelectionForInvoiceScreenState
             label,
             style: TextStyle(
               fontSize: 10,
-              color: isActive ? Colors.blue : Colors.grey.shade600,
+              color: isActive ? Colors.black : Colors.grey.shade600,
               fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
             ),
           ),
@@ -770,7 +770,7 @@ class _ProductSelectionForInvoiceScreenState
       child: Container(
         height: 2,
         margin: const EdgeInsets.only(bottom: 20),
-        color: isActive ? Colors.blue : Colors.grey.shade300,
+        color: isActive ? Colors.black : Colors.grey.shade300,
       ),
     );
   }

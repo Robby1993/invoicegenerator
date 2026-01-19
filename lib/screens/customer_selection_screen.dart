@@ -11,7 +11,7 @@ class CustomerSelectionScreen extends StatefulWidget {
   final DateTime date;
   final String transport;
   final String lrNo;
-  final double igst;
+  final double percent;
   final GstTransactionType gstType;
 
   const CustomerSelectionScreen({
@@ -21,7 +21,7 @@ class CustomerSelectionScreen extends StatefulWidget {
     required this.date,
     required this.transport,
     required this.lrNo,
-    required this.igst,
+    required this.percent,
     required this.gstType,
   });
 
@@ -49,7 +49,7 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
           date: widget.date,
           transport: widget.transport,
           lrNo: widget.lrNo,
-          igst: widget.igst,
+          percent: widget.percent,
           gstType: widget.gstType,
           customer: customer,
         ),

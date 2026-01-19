@@ -15,7 +15,7 @@ class ShowProductScreen extends StatefulWidget {
   final DateTime date;
   final String transport;
   final String lrNo;
-  final double igst;
+  final double percent;
   final GstTransactionType gstType;
 
   const ShowProductScreen({
@@ -27,7 +27,7 @@ class ShowProductScreen extends StatefulWidget {
     required this.date,
     required this.transport,
     required this.lrNo,
-    required this.igst,
+    required this.percent,
     required this.gstType,
   });
 
@@ -172,7 +172,7 @@ class _ShowProductScreenState extends State<ShowProductScreen> {
       transport: widget.transport,
       lrNo: widget.lrNo,
       items: updatedItems,
-      igst: widget.igst,
+        percent: widget.percent,
       gstType: widget.gstType
     );
 

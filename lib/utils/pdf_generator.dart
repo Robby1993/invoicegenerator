@@ -36,7 +36,7 @@ class PDFGenerator {
     double igst = 0.0;
 
     // GST percentage (example: 18)
-    final gstPercent = invoice.igst; // rename this to gstPercent ideally
+    final gstPercent = invoice.percent; // rename this to gstPercent ideally
 
     if (isInterState) {
       // IGST only
@@ -487,7 +487,15 @@ class PDFGenerator {
     itemCount < maxRowsPerPage ? maxRowsPerPage - itemCount : 0;
 
     return pw.Table(
-      border: pw.TableBorder.all(color: PdfColors.black, width: 0.5),
+     // border: pw.TableBorder.all(color: PdfColors.black, width: 0.5), /// for saperate line
+      border: pw.TableBorder(
+        left: const pw.BorderSide(color: PdfColors.black, width: 0.5),
+        right: const pw.BorderSide(color: PdfColors.black, width: 0.5),
+        top: const pw.BorderSide(color: PdfColors.black, width: 0.5),
+        bottom: const pw.BorderSide(color: PdfColors.black, width: 0.5),
+        verticalInside:
+        const pw.BorderSide(color: PdfColors.black, width: 0.5),
+      ),
       columnWidths: {
         0: const pw.FixedColumnWidth(40), // Index
         1: const pw.FlexColumnWidth(3), // Particulers
@@ -499,7 +507,12 @@ class PDFGenerator {
       children: [
         // Header Row
         pw.TableRow(
-          decoration: const pw.BoxDecoration(color: PdfColors.white),
+         // decoration: const pw.BoxDecoration(color: PdfColors.white),
+          decoration: const pw.BoxDecoration(
+            border: pw.Border(
+              bottom: pw.BorderSide(color: PdfColors.black, width: 0.5),
+            ),
+          ),
           children: [
             _buildTableHeaderCell('Index'),
             _buildTableHeaderCell('Particulers'),
@@ -523,19 +536,19 @@ class PDFGenerator {
               ),
               _buildTableDataCell(
                 item.netWeight.toStringAsFixed(1),
-                align: pw.TextAlign.right,
+                align: pw.TextAlign.center,
               ),
               _buildTableDataCell(
                 item.product.salePrice.toStringAsFixed(1),
-                align: pw.TextAlign.right,
+                align: pw.TextAlign.center,
               ),
               _buildTableDataCell(
                 item.total.toStringAsFixed(1),
-                align: pw.TextAlign.right,
+                align: pw.TextAlign.center,
               ),
             ],
           );
-        }).toList(),
+        }),
 
         // ✅ EMPTY ROWS TO EXPAND TABLE
         for (int i = 0; i < emptyRowCount; i++)

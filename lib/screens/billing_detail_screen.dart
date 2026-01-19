@@ -22,7 +22,7 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
   final _igstController = TextEditingController(text: '18');
 
   DateTime _selectedDate = DateTime.now();
-  
+
   GstTransactionType _gstType = GstTransactionType.interState;
 
   @override
@@ -62,20 +62,16 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) =>
-              CustomerSelectionScreen(
-                challanNo: _challanController.text.trim(),
-                vehicleNo: _vehicleController.text.trim(),
-                date: _selectedDate,
-                transport: _transportController.text.trim(),
-                lrNo: _lrController.text.trim(),
-               // igst: double.tryParse(_igstController.text) ?? 18,
-                igst: _gstType == GstTransactionType.interState
-                    ? double.tryParse(_igstController.text) ?? 18
-                    : 0,
-               gstType: _gstType,
-               // isInterState: _gstType == GstTransactionType.interState,
-              ),
+          builder: (_) => CustomerSelectionScreen(
+            challanNo: _challanController.text.trim(),
+            vehicleNo: _vehicleController.text.trim(),
+            date: _selectedDate,
+            transport: _transportController.text.trim(),
+            lrNo: _lrController.text.trim(),
+            percent: double.tryParse(_igstController.text) ?? 18,
+            gstType: _gstType,
+            // isInterState: _gstType == GstTransactionType.interState,
+          ),
         ),
       );
     }
@@ -127,10 +123,7 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
                     const SizedBox(height: 8),
                     const Text(
                       'Fill in the invoice details to proceed',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                      ),
+                      style: TextStyle(color: Colors.grey, fontSize: 14),
                     ),
                     const SizedBox(height: 24),
 
@@ -143,11 +136,11 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
                     const SizedBox(height: 16),
 
                     _buildTextField(
-                        controller: _vehicleController,
-                        label: 'Vehicle Number',
-                        icon: Icons.local_shipping_outlined,
-                        hint: 'e.g., GJ-01-AB-1234',
-                        enableValidation: false
+                      controller: _vehicleController,
+                      label: 'Vehicle Number',
+                      icon: Icons.local_shipping_outlined,
+                      hint: 'e.g., GJ-01-AB-1234',
+                      enableValidation: false,
                     ),
                     const SizedBox(height: 16),
 
@@ -155,20 +148,20 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
                     const SizedBox(height: 16),
 
                     _buildTextField(
-                        controller: _transportController,
-                        label: 'Transport Name',
-                        icon: Icons.airport_shuttle_outlined,
-                        hint: 'Enter transport company name',
-                        enableValidation: false
+                      controller: _transportController,
+                      label: 'Transport Name',
+                      icon: Icons.airport_shuttle_outlined,
+                      hint: 'Enter transport company name',
+                      enableValidation: false,
                     ),
                     const SizedBox(height: 16),
 
                     _buildTextField(
-                        controller: _lrController,
-                        label: 'LR Number',
-                        icon: Icons.description_outlined,
-                        hint: 'Enter LR number',
-                        enableValidation: false
+                      controller: _lrController,
+                      label: 'LR Number',
+                      icon: Icons.description_outlined,
+                      hint: 'Enter LR number',
+                      enableValidation: false,
                     ),
                     const SizedBox(height: 16),
 
@@ -181,10 +174,9 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
                       icon: Icons.percent_outlined,
                       hint: 'Enter IGST percentage',
                       keyboardType: const TextInputType.numberWithOptions(
-                          decimal: true),
+                        decimal: true,
+                      ),
                     ),
-
-
                   ],
                 ),
               ),
@@ -221,10 +213,7 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
               children: [
                 Text(
                   'Next: Select Customer',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(width: 8),
                 Icon(Icons.arrow_forward),
@@ -242,10 +231,7 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
       children: [
         const Text(
           'Transaction Type (GST)',
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
-          ),
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
         ),
         const SizedBox(height: 8),
         Container(
@@ -283,7 +269,6 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
       ],
     );
   }
-
 
   Widget _buildStepIndicator(int step, String label, bool isActive) {
     return Expanded(
@@ -344,10 +329,7 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
         ),
         const SizedBox(height: 8),
         TextFormField(
@@ -374,19 +356,16 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
           ),
           validator: enableValidation
               ? (v) {
-            if (v == null || v
-                .trim()
-                .isEmpty) {
-              return '$label is required';
-            }
-            return null;
-          }
+                  if (v == null || v.trim().isEmpty) {
+                    return '$label is required';
+                  }
+                  return null;
+                }
               : null, // 👈 skip validation
         ),
       ],
     );
   }
-
 
   Widget _buildDateField() {
     return Column(
@@ -394,10 +373,7 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
       children: [
         const Text(
           'Invoice Date',
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
-          ),
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
         ),
         const SizedBox(height: 8),
         TextFormField(
@@ -407,7 +383,9 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
           decoration: InputDecoration(
             hintText: 'Select date',
             prefixIcon: const Icon(
-                Icons.calendar_today_outlined, color: Colors.black),
+              Icons.calendar_today_outlined,
+              color: Colors.black,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(color: Colors.grey.shade300),
@@ -425,9 +403,7 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
             contentPadding: const EdgeInsets.all(16),
           ),
           validator: (v) =>
-          v
-              ?.trim()
-              .isEmpty ?? true ? 'Date is required' : null,
+              v?.trim().isEmpty ?? true ? 'Date is required' : null,
         ),
       ],
     );
@@ -435,4 +411,3 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
 }
 
 enum GstTransactionType { intraState, interState }
-
