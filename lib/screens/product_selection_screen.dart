@@ -25,7 +25,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
     super.dispose();
   }
 
-  void _addProduct() {
+  /*void _addProduct1() {
     if (_selectedProduct != null) {
       final weight = double.tryParse(_weightController.text) ?? 0;
       if (weight > 0) {
@@ -46,7 +46,38 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
         const SnackBar(content: Text('Please select a product')),
       );
     }
+  }*/
+
+  void _addProduct() {
+    if (_selectedProduct != null) {
+      final weight = double.tryParse(_weightController.text) ?? 0;
+
+      if (weight > 0) {
+        final total = weight * _selectedProduct!.salePrice;
+
+        setState(() {
+          _selectedItems.add(
+            InvoiceItem(
+              product: _selectedProduct!,
+              netWeight: weight,
+              total: total,
+            ),
+          );
+          _weightController.text = '';
+          _selectedProduct = null;
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please enter a valid weight')),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select a product')),
+      );
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {

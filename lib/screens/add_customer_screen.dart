@@ -49,7 +49,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
     super.dispose();
   }
 
-  void _saveCustomer() {
+  void _saveCustomer1() {
     if (_formKey.currentState!.validate()) {
       final customer = Customer(
         name: _nameController.text.trim(),
@@ -71,6 +71,32 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
       Navigator.pop(context);
     }
   }
+
+  void _saveCustomer() async {
+    if (_formKey.currentState!.validate()) {
+      final customer = Customer(
+        id: widget.customer?.id,
+        name: _nameController.text.trim(),
+        mobile: _mobileController.text.trim(),
+        address: _addressController.text.trim(),
+        city: _cityController.text.trim(),
+        state: _stateController.text.trim(),
+        pincode: _pincodeController.text.trim(),
+        gstNumber: _gstController.text.trim(),
+      );
+
+      final provider = context.read<CustomerProvider>();
+
+      if (widget.customer != null) {
+        await provider.updateCustomer(customer.id!, customer);
+      } else {
+        await provider.addCustomer(customer);
+      }
+
+      Navigator.pop(context);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {

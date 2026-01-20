@@ -37,7 +37,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     super.dispose();
   }
 
-  void _saveProduct() {
+  void _saveProduct1() {
     if (_formKey.currentState!.validate()) {
       final product = Product(
         name: _nameController.text.trim(),
@@ -55,6 +55,28 @@ class _AddProductScreenState extends State<AddProductScreen> {
       Navigator.pop(context);
     }
   }
+
+  void _saveProduct() async {
+    if (_formKey.currentState!.validate()) {
+      final product = Product(
+        id: widget.product?.id,
+        name: _nameController.text.trim(),
+        hsnCode: _hsnController.text.trim(),
+        salePrice: double.parse(_priceController.text.trim()),
+      );
+
+      final provider = context.read<ProductProvider>();
+
+      if (widget.product != null) {
+        await provider.updateProduct(product.id!, product);
+      } else {
+        await provider.addProduct(product);
+      }
+
+      Navigator.pop(context);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {

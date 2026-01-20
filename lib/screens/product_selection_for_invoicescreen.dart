@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:invoicegenerator/models/invoice.dart';
 import 'package:provider/provider.dart';
 import '../providers/product_provider.dart';
 import '../models/customer.dart';
@@ -94,6 +95,30 @@ class _ProductSelectionForInvoiceScreenState
             ElevatedButton(
               onPressed: () {
                 final weight = double.tryParse(weightController.text) ?? 0;
+
+                if (weight > 0) {
+                  final total = weight * product.salePrice;
+
+                  setState(() {
+                    _selectedItems.add(
+                      InvoiceItem(
+                        product: product,
+                        netWeight: weight,
+                        total: total, // ✅ REQUIRED
+                      ),
+                    );
+                  });
+
+                  Navigator.pop(ctx);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please enter a valid quantity'),
+                    ),
+                  );
+                }
+
+                /*final weight = double.tryParse(weightController.text) ?? 0;
                 if (weight > 0) {
                   setState(() {
                     _selectedItems.add(
@@ -110,7 +135,7 @@ class _ProductSelectionForInvoiceScreenState
                       content: Text('Please enter a valid quantity'),
                     ),
                   );
-                }
+                }*/
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
@@ -160,6 +185,28 @@ class _ProductSelectionForInvoiceScreenState
             ElevatedButton(
               onPressed: () {
                 final weight = double.tryParse(weightController.text) ?? 0;
+
+                if (weight > 0) {
+                  final total = weight * item.product.salePrice;
+
+                  setState(() {
+                    _selectedItems[index] = item.copyWith(
+                      netWeight: weight,
+                      total: total,
+                    );
+                  });
+
+                  Navigator.pop(ctx);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please enter a valid quantity'),
+                    ),
+                  );
+                }
+
+
+                /*final weight = double.tryParse(weightController.text) ?? 0;
                 if (weight > 0) {
                   setState(() {
                     _selectedItems[index] = InvoiceItem(
@@ -174,7 +221,7 @@ class _ProductSelectionForInvoiceScreenState
                       content: Text('Please enter a valid quantity'),
                     ),
                   );
-                }
+                }*/
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,

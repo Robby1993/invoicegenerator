@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:invoicegenerator/models/invoice.dart';
 import 'package:invoicegenerator/screens/product_selection_for_invoicescreen.dart';
 import 'package:provider/provider.dart';
 import '../providers/customer_provider.dart';
