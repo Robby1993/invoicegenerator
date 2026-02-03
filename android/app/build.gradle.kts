@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.robbym.invoicegenerator"
+            namespace = "com.robbym.invoicegenerator"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
