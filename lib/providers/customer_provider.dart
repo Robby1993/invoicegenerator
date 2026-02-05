@@ -1,27 +1,30 @@
-import 'package:flutter/foundation.dart';
-import '../models/customer.dart';
+import 'package:flutter/material.dart';
+import 'package:invoicegenerator/database_helper.dart';
+import 'package:invoicegenerator/models/customer.dart';
 
-class CustomerProvider with ChangeNotifier {
-  final List<Customer> _customers = [];
+class CustomerProvider extends ChangeNotifier {
+  final _db = DatabaseHelper.instance;
+  List<Customer> customers = [];
 
-  List<Customer> get customers => List.unmodifiable(_customers);
-
-  void addCustomer(Customer customer) {
-    _customers.add(customer);
+  Future<void> loadCustomers() async {
+    customers = await _db.getCustomers();
     notifyListeners();
   }
 
-  void updateCustomer(int index, Customer customer) {
-    if (index >= 0 && index < _customers.length) {
-      _customers[index] = customer;
-      notifyListeners();
-    }
+  Future<void> addCustomer(Customer customer) async {
+    await _db.insertCustomer(customer);
+    await loadCustomers();
   }
 
-  void deleteCustomer(int index) {
-    if (index >= 0 && index < _customers.length) {
-      _customers.removeAt(index);
-      notifyListeners();
-    }
+  Future<void> updateCustomer(int id, Customer customer) async {
+    await _db.updateCustomer(
+      customer.copyWith(id: id),
+    );
+    await loadCustomers();
+  }
+
+  Future<void> deleteCustomer(int id) async {
+    await _db.deleteCustomer(id);
+    await loadCustomers();
   }
 }

@@ -1,35 +1,28 @@
-import 'package:flutter/foundation.dart';
-import '../models/product.dart';
+import 'package:flutter/material.dart';
+import 'package:invoicegenerator/database_helper.dart';
+import 'package:invoicegenerator/models/product.dart';
 
-class ProductProvider with ChangeNotifier {
-  final List<Product> _products = [];
+class ProductProvider extends ChangeNotifier {
+  final _db = DatabaseHelper.instance;
+  List<Product> products = [];
 
-  List<Product> get products => List.unmodifiable(_products);
-
-  void addProduct(Product product) {
-    _products.add(product);
+  Future<void> loadProducts() async {
+    products = await _db.getProducts();
     notifyListeners();
   }
 
-  void updateProduct(int index, Product product) {
-    if (index >= 0 && index < _products.length) {
-      _products[index] = product;
-      notifyListeners();
-    }
+  Future<void> addProduct(Product product) async {
+    await _db.insertProduct(product);
+    await loadProducts();
   }
 
-  void deleteProduct(int index) {
-    if (index >= 0 && index < _products.length) {
-      _products.removeAt(index);
-      notifyListeners();
-    }
+  Future<void> updateProduct(int id, Product product) async {
+    await _db.updateProduct(product.copyWith(id: id));
+    await loadProducts();
   }
 
-  Product? getProductByHSN(String hsnCode) {
-    try {
-      return _products.firstWhere((p) => p.hsnCode == hsnCode);
-    } catch (e) {
-      return null;
-    }
+  Future<void> deleteProduct(int id) async {
+    await _db.deleteProduct(id);
+    await loadProducts();
   }
 }

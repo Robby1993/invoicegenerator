@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:invoicegenerator/models/invoice.dart';
 import 'package:provider/provider.dart';
 import '../providers/invoice_provider.dart';
 import 'invoice_preview_screen.dart';
@@ -9,9 +10,7 @@ class OrderHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Order History'),
-      ),
+      appBar: AppBar(title: const Text('Order History')),
       body: Consumer<InvoiceProvider>(
         builder: (context, provider, _) {
           if (provider.invoices.isEmpty) {
@@ -38,7 +37,8 @@ class OrderHistoryScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => InvoicePreviewScreen(invoice: invoice),
+                              builder: (_) =>
+                                  InvoicePreviewScreen(invoice: invoice),
                             ),
                           );
                         },
@@ -78,7 +78,11 @@ class OrderHistoryScreen extends StatelessWidget {
                                   IconButton(
                                     icon: const Icon(Icons.delete),
                                     onPressed: () {
-                                      _showDeleteDialog(context, provider, index);
+                                      _showDeleteDialog(
+                                        context,
+                                        provider,
+                                        invoice,
+                                      );
                                     },
                                   ),
                                   IconButton(
@@ -133,7 +137,7 @@ class OrderHistoryScreen extends StatelessWidget {
   void _showDeleteDialog(
     BuildContext context,
     InvoiceProvider provider,
-    int index,
+    Invoice invoice,
   ) {
     showDialog(
       context: context,
@@ -146,8 +150,8 @@ class OrderHistoryScreen extends StatelessWidget {
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () {
-              provider.deleteInvoice(index);
+            onPressed: () async {
+              await provider.deleteInvoice(invoice.id!);
               Navigator.pop(ctx);
             },
             child: const Text('Delete'),
@@ -170,7 +174,10 @@ class _InfoRow extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 4),
       child: Row(
         children: [
-          Text('$label : ', style: const TextStyle(fontWeight: FontWeight.w600)),
+          Text(
+            '$label : ',
+            style: const TextStyle(fontWeight: FontWeight.w600),
+          ),
           Expanded(child: Text(value)),
         ],
       ),
