@@ -11,3 +11,4 @@ class InvoiceItem {
 
   double get total => product.salePrice * netWeight;
 }
+
