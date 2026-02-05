@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:invoicegenerator/screens/billing_detail_screen.dart';
 import 'package:pdf/pdf.dart';
@@ -19,21 +18,15 @@ class PDFGenerator {
     // Pre-calculate all totals
     final subtotal = invoice.items.fold(0.0, (sum, item) => sum + item.total);
 
-    /*bool type = invoice.gstType == GstTransactionType.interState;
-    // Split IGST into CGST and SGST (9% each if IGST is 18%)
-    final cgst = subtotal * (invoice.igst / 2 / 100);
-    final sgst = subtotal * (invoice.igst / 2 / 100);
-    // final sgst = subtotal * (invoice.igst / 2 / 100);
-    final igstAmount = invoice.gstType == GstTransactionType.interState
-        ? 0.0
-        : invoice.igst;
-    final total = subtotal + cgst + sgst;*/
-
     final bool isInterState = invoice.gstType == GstTransactionType.interState;
 
     double cgst = 0.0;
     double sgst = 0.0;
     double igst = 0.0;
+
+    double cgstPercent = 0.0;
+    double sgstPercent = 0.0;
+    double igstPercent = 0.0;
 
     // GST percentage (example: 18)
     final gstPercent = invoice.percent; // rename this to gstPercent ideally
@@ -41,10 +34,13 @@ class PDFGenerator {
     if (isInterState) {
       // IGST only
       igst = subtotal * gstPercent / 100;
+      igstPercent = gstPercent;
     } else {
       // CGST + SGST (split equally)
       cgst = subtotal * (gstPercent / 2) / 100;
       sgst = subtotal * (gstPercent / 2) / 100;
+      cgstPercent = gstPercent / 2;
+      sgstPercent = gstPercent / 2;
     }
 
     final total = subtotal + cgst + sgst + igst;
@@ -103,6 +99,9 @@ class PDFGenerator {
                       cgst,
                       sgst,
                       igst,
+                      cgstPercent,
+                      sgstPercent,
+                      igstPercent,
                       total,
                     ),
                   ),
@@ -629,6 +628,9 @@ class PDFGenerator {
     double cgst,
     double sgst,
     double igst,
+      double cgstPercent,
+    double sgstPercent,
+    double igstPercent,
     double total,
   ) {
     return pw.Container(
@@ -638,9 +640,9 @@ class PDFGenerator {
       child: pw.Column(
         children: [
           _buildTotalRowWithBorder('Subtotal', subtotal),
-          _buildTotalRowWithBorder('CGST (9.0%)', cgst),
-          _buildTotalRowWithBorder('SGST (9.0%)', sgst),
-          _buildTotalRowWithBorder('IGST (18.0%)', igst),
+          _buildTotalRowWithBorder('CGST ($cgstPercent %)', cgst),
+          _buildTotalRowWithBorder('SGST ($sgstPercent %)', sgst),
+          _buildTotalRowWithBorder('IGST ($igstPercent %)', igst),
           _buildTotalRowWithBorder('Total', total, isBold: true),
         ],
       ),
@@ -703,15 +705,6 @@ class PDFGenerator {
     );
   }
 
-  static pw.Widget _buildTermLine(String text) {
-    return pw.Padding(
-      padding: const pw.EdgeInsets.only(bottom: 2),
-      child: pw.Text(
-        text,
-        style: pw.TextStyle(fontSize: 9, fontWeight: pw.FontWeight.bold),
-      ),
-    );
-  }
 
   static pw.Widget _buildSignature() {
     return pw.Align(

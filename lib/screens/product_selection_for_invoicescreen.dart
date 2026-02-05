@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:invoicegenerator/models/invoice.dart';
+import 'package:invoicegenerator/screens/billing_detail_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/product_provider.dart';
 import '../models/customer.dart';
 import '../models/product.dart';
 import '../models/invoice_item.dart';
-import 'billing_detail_screen.dart';
 import 'invoice_confirm_screen.dart';
 
 class ProductSelectionForInvoiceScreen extends StatefulWidget {
@@ -49,43 +48,55 @@ class _ProductSelectionForInvoiceScreenState
 
   void _showAddProductDialog(Product product) {
     final weightController = TextEditingController(text: '1');
+    final priceController = TextEditingController(
+      text: product.salePrice.toStringAsFixed(2),
+    );
 
     showDialog(
       context: context,
       builder: (ctx) {
         return AlertDialog(
           title: Text(product.name),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'HSN Code: ${product.hsnCode}',
-                style: TextStyle(color: Colors.grey.shade600),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Price: ₹${product.salePrice.toStringAsFixed(2)}',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'HSN Code: ${product.hsnCode}',
+                  style: TextStyle(color: Colors.grey.shade600),
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: weightController,
-                keyboardType:
-                const TextInputType.numberWithOptions(decimal: true),
-                decoration: InputDecoration(
-                  labelText: 'Quantity/Weight',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: priceController,
+                  keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+                  decoration: InputDecoration(
+                    labelText: 'Price per Unit',
+                    prefixText: '₹ ',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    prefixIcon: const Icon(Icons.currency_rupee),
+                    helperText: 'You can edit the price for this invoice',
                   ),
-                  prefixIcon: const Icon(Icons.scale_outlined),
                 ),
-                autofocus: true,
-              ),
-            ],
+                const SizedBox(height: 16),
+                TextField(
+                  controller: weightController,
+                  keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+                  decoration: InputDecoration(
+                    labelText: 'Quantity/Weight',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    prefixIcon: const Icon(Icons.scale_outlined),
+                  ),
+                  autofocus: true,
+                ),
+              ],
+            ),
           ),
           actions: [
             TextButton(
@@ -95,47 +106,33 @@ class _ProductSelectionForInvoiceScreenState
             ElevatedButton(
               onPressed: () {
                 final weight = double.tryParse(weightController.text) ?? 0;
+                final price = double.tryParse(priceController.text) ?? 0;
 
-                if (weight > 0) {
-                  final total = weight * product.salePrice;
+                if (weight > 0 && price > 0) {
+                  // Create a new product with updated price
+                  final productWithNewPrice = Product(
+                    name: product.name,
+                    hsnCode: product.hsnCode,
+                    salePrice: price,
+                  );
 
                   setState(() {
                     _selectedItems.add(
                       InvoiceItem(
-                        product: product,
+                        product: productWithNewPrice,
                         netWeight: weight,
-                        total: total, // ✅ REQUIRED
                       ),
                     );
                   });
-
                   Navigator.pop(ctx);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Please enter a valid quantity'),
+                      content: Text('Please enter valid quantity and price'),
+                      backgroundColor: Colors.red,
                     ),
                   );
                 }
-
-                /*final weight = double.tryParse(weightController.text) ?? 0;
-                if (weight > 0) {
-                  setState(() {
-                    _selectedItems.add(
-                      InvoiceItem(
-                        product: product,
-                        netWeight: weight,
-                      ),
-                    );
-                  });
-                  Navigator.pop(ctx);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please enter a valid quantity'),
-                    ),
-                  );
-                }*/
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
@@ -159,23 +156,55 @@ class _ProductSelectionForInvoiceScreenState
     final item = _selectedItems[index];
     final weightController =
     TextEditingController(text: item.netWeight.toString());
+    final priceController = TextEditingController(
+      text: item.product.salePrice.toStringAsFixed(2),
+    );
 
     showDialog(
       context: context,
       builder: (ctx) {
         return AlertDialog(
           title: Text('Edit ${item.product.name}'),
-          content: TextField(
-            controller: weightController,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            decoration: InputDecoration(
-              labelText: 'Quantity/Weight',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              prefixIcon: const Icon(Icons.scale_outlined),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'HSN Code: ${item.product.hsnCode}',
+                  style: TextStyle(color: Colors.grey.shade600),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: priceController,
+                  keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+                  decoration: InputDecoration(
+                    labelText: 'Price per Unit',
+                    prefixText: '₹ ',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    prefixIcon: const Icon(Icons.currency_rupee),
+                    helperText: 'Edit price for this invoice only',
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: weightController,
+                  keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+                  decoration: InputDecoration(
+                    labelText: 'Quantity/Weight',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    prefixIcon: const Icon(Icons.scale_outlined),
+                  ),
+                  autofocus: true,
+                ),
+              ],
             ),
-            autofocus: true,
           ),
           actions: [
             TextButton(
@@ -185,43 +214,31 @@ class _ProductSelectionForInvoiceScreenState
             ElevatedButton(
               onPressed: () {
                 final weight = double.tryParse(weightController.text) ?? 0;
+                final price = double.tryParse(priceController.text) ?? 0;
 
-                if (weight > 0) {
-                  final total = weight * item.product.salePrice;
+                if (weight > 0 && price > 0) {
+                  // Create a new product with updated price
+                  final productWithNewPrice = Product(
+                    name: item.product.name,
+                    hsnCode: item.product.hsnCode,
+                    salePrice: price,
+                  );
 
                   setState(() {
-                    _selectedItems[index] = item.copyWith(
+                    _selectedItems[index] = InvoiceItem(
+                      product: productWithNewPrice,
                       netWeight: weight,
-                      total: total,
                     );
                   });
-
                   Navigator.pop(ctx);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Please enter a valid quantity'),
+                      content: Text('Please enter valid quantity and price'),
+                      backgroundColor: Colors.red,
                     ),
                   );
                 }
-
-
-                /*final weight = double.tryParse(weightController.text) ?? 0;
-                if (weight > 0) {
-                  setState(() {
-                    _selectedItems[index] = InvoiceItem(
-                      product: item.product,
-                      netWeight: weight,
-                    );
-                  });
-                  Navigator.pop(ctx);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please enter a valid quantity'),
-                    ),
-                  );
-                }*/
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
@@ -398,7 +415,7 @@ class _ProductSelectionForInvoiceScreenState
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.shopping_cart, color: Colors.black),
+                  const Icon(Icons.shopping_cart, color: Colors.blue),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -512,7 +529,7 @@ class _ProductSelectionForInvoiceScreenState
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                         side: isSelected
-                            ? const BorderSide(color: Colors.black, width: 2)
+                            ? const BorderSide(color: Colors.blue, width: 2)
                             : BorderSide.none,
                       ),
                       child: InkWell(
@@ -531,7 +548,7 @@ class _ProductSelectionForInvoiceScreenState
                                 ),
                                 child: const Icon(
                                   Icons.inventory_2_outlined,
-                                  color: Colors.black,
+                                  color: Colors.blue,
                                   size: 28,
                                 ),
                               ),
@@ -570,7 +587,7 @@ class _ProductSelectionForInvoiceScreenState
                               if (isSelected)
                                 const Icon(
                                   Icons.check_circle,
-                                  color: Colors.black,
+                                  color: Colors.blue,
                                   size: 28,
                                 )
                               else
@@ -608,7 +625,7 @@ class _ProductSelectionForInvoiceScreenState
             onPressed: _selectedItems.isEmpty ? null : _proceedToConfirm,
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
-              backgroundColor: Colors.black,
+              backgroundColor: Colors.blue,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -722,7 +739,7 @@ class _ProductSelectionForInvoiceScreenState
                               _editItem(index);
                             },
                             icon: const Icon(Icons.edit_outlined),
-                            color: Colors.black,
+                            color: Colors.blue,
                           ),
                           IconButton(
                             onPressed: () {
@@ -784,7 +801,7 @@ class _ProductSelectionForInvoiceScreenState
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-              color: isActive ? Colors.black : Colors.grey.shade300,
+              color: isActive ? Colors.blue : Colors.grey.shade300,
               shape: BoxShape.circle,
             ),
             child: Center(
@@ -803,7 +820,7 @@ class _ProductSelectionForInvoiceScreenState
             label,
             style: TextStyle(
               fontSize: 10,
-              color: isActive ? Colors.black : Colors.grey.shade600,
+              color: isActive ? Colors.blue : Colors.grey.shade600,
               fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
             ),
           ),
@@ -817,7 +834,7 @@ class _ProductSelectionForInvoiceScreenState
       child: Container(
         height: 2,
         margin: const EdgeInsets.only(bottom: 20),
-        color: isActive ? Colors.black : Colors.grey.shade300,
+        color: isActive ? Colors.blue : Colors.grey.shade300,
       ),
     );
   }
