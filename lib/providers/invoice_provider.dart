@@ -44,7 +44,8 @@ class InvoiceProvider extends ChangeNotifier {
     _lastInvoiceNo = await _db.getLastInvoiceNumber();
   }*/
 
-  String getNextInvoiceNumber() {
+  Future<String> getNextInvoiceNumber() async {
+    _lastInvoiceNo =  await _db.getLastInvoiceNumber();
     _lastInvoiceNo++;
     return _lastInvoiceNo.toString().padLeft(4, '0');
   }

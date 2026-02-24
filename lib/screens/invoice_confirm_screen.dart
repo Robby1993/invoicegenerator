@@ -60,7 +60,7 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
     await Future.delayed(const Duration(milliseconds: 800));
 
     final provider = context.read<InvoiceProvider>();
-    final invoiceNo = provider.getNextInvoiceNumber();
+    final invoiceNo = await provider.getNextInvoiceNumber();
 
     final invoice = Invoice(
       invoiceNo: invoiceNo,
