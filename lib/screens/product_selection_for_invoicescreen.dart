@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:invoicegenerator/screens/billing_detail_screen.dart';
+import 'package:invoicegenerator/models/invoice.dart';
 import 'package:provider/provider.dart';
 import '../providers/product_provider.dart';
 import '../models/customer.dart';
@@ -109,6 +109,7 @@ class _ProductSelectionForInvoiceScreenState
                 final price = double.tryParse(priceController.text) ?? 0;
 
                 if (weight > 0 && price > 0) {
+                  double total = price * weight;
                   // Create a new product with updated price
                   final productWithNewPrice = Product(
                     name: product.name,
@@ -121,6 +122,7 @@ class _ProductSelectionForInvoiceScreenState
                       InvoiceItem(
                         product: productWithNewPrice,
                         netWeight: weight,
+                        total: total
                       ),
                     );
                   });
@@ -217,6 +219,7 @@ class _ProductSelectionForInvoiceScreenState
                 final price = double.tryParse(priceController.text) ?? 0;
 
                 if (weight > 0 && price > 0) {
+                  double total = price * weight;
                   // Create a new product with updated price
                   final productWithNewPrice = Product(
                     name: item.product.name,
@@ -228,6 +231,7 @@ class _ProductSelectionForInvoiceScreenState
                     _selectedItems[index] = InvoiceItem(
                       product: productWithNewPrice,
                       netWeight: weight,
+                      total: total
                     );
                   });
                   Navigator.pop(ctx);
