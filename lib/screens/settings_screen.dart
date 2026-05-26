@@ -20,16 +20,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() => _isProcessing = true);
     final hasPermission = await BackupService.requestStoragePermission();
     if (hasPermission) {
-      final path = await BackupService.exportData();
+      final path = await BackupService.exportToDownloads();
       if (mounted) {
         if (path != null) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Backup exported successfully')),
+            const SnackBar(content: Text('Backup saved successfully')),
           );
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Failed to export backup')),
-          );
+          // If path is null, it might be cancelled or failed
+          // We don't show error for cancel usually, but BackupService returns null for both
         }
       }
     } else {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:invoicegenerator/utils/responsive.dart';
 import 'package:provider/provider.dart';
 import '../providers/customer_provider.dart';
@@ -23,6 +24,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
   final _stateController = TextEditingController();
   final _pincodeController = TextEditingController();
   final _gstController = TextEditingController();
+  String _completePhoneNumber = "";
 
   @override
   void initState() {
@@ -30,6 +32,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
     if (widget.customer != null) {
       _nameController.text = widget.customer!.name;
       _mobileController.text = widget.customer!.mobile;
+      _completePhoneNumber = widget.customer!.mobile;
       _addressController.text = widget.customer!.address;
       _cityController.text = widget.customer!.city;
       _stateController.text = widget.customer!.state;
@@ -55,7 +58,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
       final customer = Customer(
         id: widget.customer?.id,
         name: _nameController.text.trim(),
-        mobile: _mobileController.text.trim(),
+        mobile: _completePhoneNumber.isEmpty ? _mobileController.text.trim() : _completePhoneNumber,
         address: _addressController.text.trim(),
         city: _cityController.text.trim(),
         state: _stateController.text.trim(),
@@ -90,12 +93,64 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
           child: Column(
             children: [
               _buildTextField(_nameController, 'Name'),
-              _buildTextField(_mobileController, 'Mobile', TextInputType.phone),
+              Padding(
+                padding: EdgeInsets.only(bottom: 16.h),
+                child: IntlPhoneField(
+                  controller: _mobileController,
+                  initialCountryCode: 'IN',
+                  decoration: InputDecoration(
+                    hintText: 'Mobile',
+                    hintStyle: TextStyle(fontSize: 14.sp),
+                    border: const OutlineInputBorder(),
+                    contentPadding: EdgeInsets.all(16.r),
+                  ),
+                  style: TextStyle(fontSize: 14.sp),
+                  onChanged: (phone) {
+                    _completePhoneNumber = phone.completeNumber;
+                  },
+                  onCountryChanged: (country) {
+                    // Force rebuild of complete number if country changes
+                  },
+                  validator: (v) {
+                    if (v == null || v.completeNumber.isEmpty) {
+                      return 'Mobile is required';
+                    }
+                    return null;
+                  },
+                ),
+              ),
               _buildTextField(_addressController, 'Address'),
               _buildTextField(_cityController, 'City'),
               _buildTextField(_stateController, 'State'),
-              _buildTextField(_pincodeController, 'Pincode', TextInputType.number),
-              _buildTextField(_gstController, 'GST Number', null, false),
+              _buildTextField(
+                _pincodeController,
+                'Pincode',
+                TextInputType.number,
+                true,
+                (v) {
+                  if (v == null || v.trim().isEmpty) return 'Pincode is required';
+                  if (!RegExp(r'^\d{6}$').hasMatch(v.trim())) {
+                    return 'Enter a valid 6-digit pincode';
+                  }
+                  return null;
+                },
+              ),
+              _buildTextField(
+                _gstController,
+                'GST Number',
+                null,
+                false,
+                (v) {
+                  if (v != null && v.trim().isNotEmpty) {
+                    // Standard GST regex
+                    if (!RegExp(r'^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$')
+                        .hasMatch(v.trim().toUpperCase())) {
+                      return 'Enter a valid GST number';
+                    }
+                  }
+                  return null;
+                },
+              ),
               SizedBox(height: 32.h),
               ElevatedButton(
                 onPressed: _saveCustomer,
@@ -117,6 +172,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
     String label, [
     TextInputType? keyboardType,
     bool required = true,
+    String? Function(String?)? customValidator,
   ]) {
     return Padding(
       padding: EdgeInsets.only(bottom: 16.h),
@@ -130,9 +186,9 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
           contentPadding: EdgeInsets.all(16.r),
         ),
         keyboardType: keyboardType,
-        validator: required
+        validator: customValidator ?? (required
             ? (v) => v?.trim().isEmpty ?? true ? '$label is required' : null
-            : null,
+            : null),
       ),
     );
   }

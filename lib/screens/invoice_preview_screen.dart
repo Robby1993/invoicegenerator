@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:invoicegenerator/utils/responsive.dart';
 import 'package:printing/printing.dart';
@@ -73,15 +74,19 @@ class InvoicePreviewScreen extends StatelessWidget {
   Future<void> _downloadPdf(BuildContext context) async {
     try {
       final pdf = await PDFGenerator.generateInvoice(invoice);
-      await Printing.sharePdf(
+      
+      final result = await FilePicker.platform.saveFile(
+        dialogTitle: 'Save Invoice',
+        fileName: 'Invoice_${invoice.invoiceNo}.pdf',
         bytes: pdf,
-        filename: 'Invoice_${invoice.invoiceNo}.pdf',
+        type: FileType.custom,
+        allowedExtensions: ['pdf'],
       );
 
-      if (context.mounted) {
+      if (context.mounted && result != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('PDF ready to download', style: TextStyle(fontSize: 14.sp)),
+            content: Text('PDF saved successfully', style: TextStyle(fontSize: 14.sp)),
             backgroundColor: Colors.green,
             duration: const Duration(seconds: 2),
           ),
@@ -91,7 +96,7 @@ class InvoicePreviewScreen extends StatelessWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error downloading PDF: $e', style: TextStyle(fontSize: 14.sp)),
+            content: Text('Error saving PDF: $e', style: TextStyle(fontSize: 14.sp)),
             backgroundColor: Colors.red,
           ),
         );

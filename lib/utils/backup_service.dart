@@ -4,7 +4,6 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:invoicegenerator/database_helper.dart';
 import 'package:invoicegenerator/models/customer.dart';
-import 'package:invoicegenerator/models/invoice.dart';
 import 'package:invoicegenerator/models/product.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -32,7 +31,7 @@ class BackupService {
     return true;
   }
 
-  static Future<String?> exportData() async {
+  static Future<String?> exportData({bool share = true}) async {
     try {
       final db = DatabaseHelper.instance;
       final customers = await db.getCustomers();
@@ -59,12 +58,40 @@ class BackupService {
       final file = File('${directory.path}/invoice_backup_$timestamp.json');
       await file.writeAsString(jsonString);
 
-      // On Android, we'll try to save to Downloads or just Share it
-      await Share.shareXFiles([XFile(file.path)], text: 'Invoice App Backup');
+      if (share) {
+        // On Android, we'll try to save to Downloads or just Share it
+        await Share.shareXFiles([XFile(file.path)], text: 'Invoice App Backup');
+      }
       
       return file.path;
     } catch (e) {
       print('Export error: $e');
+      return null;
+    }
+  }
+
+  static Future<String?> exportToDownloads() async {
+    try {
+      final path = await exportData(share: false);
+      if (path == null) return null;
+
+      final file = File(path);
+      final bytes = await file.readAsBytes();
+      
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final fileName = 'invoice_backup_$timestamp.json';
+
+      final result = await FilePicker.platform.saveFile(
+        dialogTitle: 'Save Backup',
+        fileName: fileName,
+        bytes: bytes,
+        type: FileType.custom,
+        allowedExtensions: ['json'],
+      );
+
+      return result;
+    } catch (e) {
+      print('Save to downloads error: $e');
       return null;
     }
   }

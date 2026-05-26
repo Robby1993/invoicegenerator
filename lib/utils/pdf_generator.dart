@@ -10,7 +10,7 @@ class PDFGenerator {
     final pdf = pw.Document();
 
     final Uint8List logoBytes = (await rootBundle.load(
-      'assets/icon/app_icon.png',
+      'assets/icon/logo.png',
     )).buffer.asUint8List();
 
     final logo = pw.MemoryImage(logoBytes);
