@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:invoicegenerator/models/invoice.dart';
+import 'package:invoicegenerator/utils/responsive.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../providers/customer_provider.dart';
@@ -80,9 +81,10 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Responsive.init(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Billing Details'),
+        title: Text('Billing Details', style: TextStyle(fontSize: 20.sp)),
         centerTitle: true,
         elevation: 0,
       ),
@@ -91,7 +93,7 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
           children: [
             // Progress Indicator
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.r),
               color: Colors.blue.shade50,
               child: Row(
                 children: [
@@ -108,25 +110,25 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
 
             // Form
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.r),
               child: Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Enter Billing Information',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 20.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    const Text(
+                    SizedBox(height: 8.h),
+                    Text(
                       'Fill in the invoice details to proceed',
-                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                      style: TextStyle(color: Colors.grey, fontSize: 14.sp),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
 
                     _buildTextField(
                       controller: _challanController,
@@ -134,7 +136,7 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
                       icon: Icons.receipt_outlined,
                       hint: 'Enter challan number',
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     _buildTextField(
                       controller: _vehicleController,
@@ -143,10 +145,10 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
                       hint: 'e.g., GJ-01-AB-1234',
                       enableValidation: false,
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     _buildDateField(),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     _buildTextField(
                       controller: _transportController,
@@ -155,7 +157,7 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
                       hint: 'Enter transport company name',
                       enableValidation: false,
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     _buildTextField(
                       controller: _lrController,
@@ -164,10 +166,10 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
                       hint: 'Enter LR number',
                       enableValidation: false,
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     _buildGstTransactionType(),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     _buildTextField(
                       controller: _igstController,
@@ -178,6 +180,7 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
                         decimal: true,
                       ),
                     ),
+                    SizedBox(height: 32.h), // Bottom padding for scroll
                   ],
                 ),
               ),
@@ -186,14 +189,14 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
         ),
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, -5),
+              blurRadius: 10.r,
+              offset: Offset(0, -5.h),
             ),
           ],
         ),
@@ -201,23 +204,23 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
           child: ElevatedButton(
             onPressed: _proceedToCustomerSelection,
             style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: EdgeInsets.symmetric(vertical: 16.h),
               backgroundColor: Colors.black,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
               ),
               elevation: 2,
             ),
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   'Next: Select Customer',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(width: 8),
-                Icon(Icons.arrow_forward),
+                SizedBox(width: 8.w),
+                Icon(Icons.arrow_forward, size: 20.i),
               ],
             ),
           ),
@@ -230,15 +233,15 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Transaction Type (GST)',
-          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14.sp),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
         Container(
-          padding: const EdgeInsets.all(12),
+          padding: EdgeInsets.all(12.r),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
             border: Border.all(color: Colors.grey.shade300),
             color: Colors.grey.shade50,
           ),
@@ -247,7 +250,7 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
               RadioListTile<GstTransactionType>(
                 value: GstTransactionType.interState,
                 groupValue: _gstType,
-                title: const Text('Inter State (IGST)'),
+                title: Text('Inter State (IGST)', style: TextStyle(fontSize: 14.sp)),
                 onChanged: (value) {
                   setState(() {
                     _gstType = value!;
@@ -257,7 +260,7 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
               RadioListTile<GstTransactionType>(
                 value: GstTransactionType.intraState,
                 groupValue: _gstType,
-                title: const Text('Intra State (CGST + SGST)'),
+                title: Text('Intra State (CGST + SGST)', style: TextStyle(fontSize: 14.sp)),
                 onChanged: (value) {
                   setState(() {
                     _gstType = value!;
@@ -276,8 +279,8 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
       child: Column(
         children: [
           Container(
-            width: 32,
-            height: 32,
+            width: 32.i,
+            height: 32.i,
             decoration: BoxDecoration(
               color: isActive ? Colors.black : Colors.grey.shade300,
               shape: BoxShape.circle,
@@ -288,16 +291,16 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
                 style: TextStyle(
                   color: isActive ? Colors.white : Colors.grey.shade600,
                   fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  fontSize: 14.sp,
                 ),
               ),
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4.h),
           Text(
             label,
             style: TextStyle(
-              fontSize: 10,
+              fontSize: 10.sp,
               color: isActive ? Colors.black : Colors.grey.shade600,
               fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
             ),
@@ -310,8 +313,8 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
   Widget _buildStepConnector(bool isActive) {
     return Expanded(
       child: Container(
-        height: 2,
-        margin: const EdgeInsets.only(bottom: 20),
+        height: 2.h,
+        margin: EdgeInsets.only(bottom: 20.h),
         color: isActive ? Colors.black : Colors.grey.shade300,
       ),
     );
@@ -330,30 +333,32 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
       children: [
         Text(
           label,
-          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14.sp),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
         TextFormField(
           controller: controller,
           keyboardType: keyboardType,
+          style: TextStyle(fontSize: 14.sp),
           decoration: InputDecoration(
             hintText: hint,
-            prefixIcon: Icon(icon, color: Colors.black),
+            hintStyle: TextStyle(fontSize: 14.sp),
+            prefixIcon: Icon(icon, color: Colors.black, size: 20.i),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12.r),
               borderSide: BorderSide(color: Colors.grey.shade300),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12.r),
               borderSide: BorderSide(color: Colors.grey.shade300),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.black, width: 2),
+              borderRadius: BorderRadius.circular(12.r),
+              borderSide: BorderSide(color: Colors.black, width: 2.r),
             ),
             filled: true,
             fillColor: Colors.grey.shade50,
-            contentPadding: const EdgeInsets.all(16),
+            contentPadding: EdgeInsets.all(16.r),
           ),
           validator: enableValidation
               ? (v) {
@@ -372,36 +377,39 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Invoice Date',
-          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14.sp),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
         TextFormField(
           controller: _dateController,
           readOnly: true,
           onTap: _selectDate,
+          style: TextStyle(fontSize: 14.sp),
           decoration: InputDecoration(
             hintText: 'Select date',
-            prefixIcon: const Icon(
+            hintStyle: TextStyle(fontSize: 14.sp),
+            prefixIcon: Icon(
               Icons.calendar_today_outlined,
               color: Colors.black,
+              size: 20.i,
             ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12.r),
               borderSide: BorderSide(color: Colors.grey.shade300),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12.r),
               borderSide: BorderSide(color: Colors.grey.shade300),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.black, width: 2),
+              borderRadius: BorderRadius.circular(12.r),
+              borderSide: BorderSide(color: Colors.black, width: 2.r),
             ),
             filled: true,
             fillColor: Colors.grey.shade50,
-            contentPadding: const EdgeInsets.all(16),
+            contentPadding: EdgeInsets.all(16.r),
           ),
           validator: (v) =>
               v?.trim().isEmpty ?? true ? 'Date is required' : null,

@@ -331,24 +331,7 @@ class PDFGenerator {
           children: [
             // Logo placeholder
             pw.Image(logo, width: 60), // PDF icon/logo
-            /*pw.Container(
-              width: 60,
-              height: 60,
-              decoration: pw.BoxDecoration(
-                border: pw.Border.all(color: PdfColors.blue900, width: 2),
-                shape: pw.BoxShape.circle,
-              ),
-              child: pw.Center(
-                child: pw.Text(
-                  CompanyConfig.companyNameShort,
-                  style: pw.TextStyle(
-                    fontSize: 24,
-                    fontWeight: pw.FontWeight.bold,
-                    color: PdfColors.blue900,
-                  ),
-                ),
-              ),
-            ),*/
+
             // pw.SizedBox(width: 15),
             pw.Text(
               CompanyConfig.companyName,

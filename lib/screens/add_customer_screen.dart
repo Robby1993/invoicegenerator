@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:invoicegenerator/utils/responsive.dart';
 import 'package:provider/provider.dart';
 import '../providers/customer_provider.dart';
 import '../models/customer.dart';
@@ -49,29 +50,6 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
     super.dispose();
   }
 
-  void _saveCustomer1() {
-    if (_formKey.currentState!.validate()) {
-      final customer = Customer(
-        name: _nameController.text.trim(),
-        mobile: _mobileController.text.trim(),
-        address: _addressController.text.trim(),
-        city: _cityController.text.trim(),
-        state: _stateController.text.trim(),
-        pincode: _pincodeController.text.trim(),
-        gstNumber: _gstController.text.trim(),
-      );
-
-      final provider = context.read<CustomerProvider>();
-      if (widget.index != null) {
-        provider.updateCustomer(widget.index!, customer);
-      } else {
-        provider.addCustomer(customer);
-      }
-
-      Navigator.pop(context);
-    }
-  }
-
   void _saveCustomer() async {
     if (_formKey.currentState!.validate()) {
       final customer = Customer(
@@ -100,12 +78,13 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Responsive.init(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.customer != null ? 'Edit Customer' : 'Add Customer'),
+        title: Text(widget.customer != null ? 'Edit Customer' : 'Add Customer', style: TextStyle(fontSize: 20.sp)),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.r),
         child: Form(
           key: _formKey,
           child: Column(
@@ -117,14 +96,14 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
               _buildTextField(_stateController, 'State'),
               _buildTextField(_pincodeController, 'Pincode', TextInputType.number),
               _buildTextField(_gstController, 'GST Number', null, false),
-              const SizedBox(height: 32),
+              SizedBox(height: 32.h),
               ElevatedButton(
                 onPressed: _saveCustomer,
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+                  padding: EdgeInsets.symmetric(horizontal: 48.w, vertical: 16.h),
                   backgroundColor: Colors.grey[400],
                 ),
-                child: const Text('SAVE', style: TextStyle(color: Colors.black87)),
+                child: Text('SAVE', style: TextStyle(color: Colors.black87, fontSize: 16.sp, fontWeight: FontWeight.bold)),
               ),
             ],
           ),
@@ -140,13 +119,15 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
     bool required = true,
   ]) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: EdgeInsets.only(bottom: 16.h),
       child: TextFormField(
         controller: controller,
+        style: TextStyle(fontSize: 14.sp),
         decoration: InputDecoration(
           hintText: label,
+          hintStyle: TextStyle(fontSize: 14.sp),
           border: const OutlineInputBorder(),
-          contentPadding: const EdgeInsets.all(16),
+          contentPadding: EdgeInsets.all(16.r),
         ),
         keyboardType: keyboardType,
         validator: required

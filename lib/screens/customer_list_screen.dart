@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:invoicegenerator/utils/responsive.dart';
 import 'package:provider/provider.dart';
 import '../providers/customer_provider.dart';
 import 'add_customer_screen.dart';
@@ -8,30 +9,31 @@ class CustomerListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Responsive.init(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Customer List'),
+        title: Text('Customer List', style: TextStyle(fontSize: 20.sp)),
       ),
       body: Consumer<CustomerProvider>(
         builder: (context, provider, _) {
           if (provider.customers.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
                 'Data not found',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
               ),
             );
           }
 
           return ListView.builder(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16.r),
             itemCount: provider.customers.length,
             itemBuilder: (context, index) {
               final customer = provider.customers[index];
               return Card(
-                margin: const EdgeInsets.only(bottom: 12),
+                margin: EdgeInsets.only(bottom: 12.h),
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(16.r),
                   child: Row(
                     children: [
                       Expanded(
@@ -51,13 +53,13 @@ class CustomerListScreen extends StatelessWidget {
                       Column(
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.delete),
+                            icon: Icon(Icons.delete, size: 24.i),
                             onPressed: () {
                               _showDeleteDialog(context, provider, index);
                             },
                           ),
                           IconButton(
-                            icon: const Icon(Icons.edit),
+                            icon: Icon(Icons.edit, size: 24.i),
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -87,7 +89,7 @@ class CustomerListScreen extends StatelessWidget {
             MaterialPageRoute(builder: (_) => const AddCustomerScreen()),
           );
         },
-        child: const Icon(Icons.add),
+        child: Icon(Icons.add, size: 24.i),
       ),
     );
   }
@@ -100,19 +102,19 @@ class CustomerListScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete Customer'),
-        content: const Text('Are you sure you want to delete this customer?'),
+        title: Text('Delete Customer', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
+        content: Text('Are you sure you want to delete this customer?', style: TextStyle(fontSize: 14.sp)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: Text('Cancel', style: TextStyle(fontSize: 14.sp)),
           ),
           TextButton(
             onPressed: () {
               provider.deleteCustomer(index);
               Navigator.pop(ctx);
             },
-            child: const Text('Delete'),
+            child: Text('Delete', style: TextStyle(fontSize: 14.sp, color: Colors.red)),
           ),
         ],
       ),
@@ -129,14 +131,14 @@ class _InfoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
+      padding: EdgeInsets.only(bottom: 4.h),
       child: Row(
         children: [
           Text(
             '$label : ',
-            style: const TextStyle(fontWeight: FontWeight.w600),
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14.sp),
           ),
-          Expanded(child: Text(value)),
+          Expanded(child: Text(value, style: TextStyle(fontSize: 14.sp))),
         ],
       ),
     );

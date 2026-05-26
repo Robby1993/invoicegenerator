@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:invoicegenerator/models/invoice.dart';
+import 'package:invoicegenerator/utils/responsive.dart';
 import 'package:provider/provider.dart';
 import '../providers/invoice_provider.dart';
 import 'invoice_preview_screen.dart';
@@ -9,15 +10,16 @@ class OrderHistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Responsive.init(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Order History')),
+      appBar: AppBar(title: Text('Order History', style: TextStyle(fontSize: 20.sp))),
       body: Consumer<InvoiceProvider>(
         builder: (context, provider, _) {
           if (provider.invoices.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
                 'No orders yet',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
               ),
             );
           }
@@ -26,12 +28,12 @@ class OrderHistoryScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: ListView.builder(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(16.r),
                   itemCount: provider.invoices.length,
                   itemBuilder: (context, index) {
                     final invoice = provider.invoices[index];
                     return Card(
-                      margin: const EdgeInsets.only(bottom: 12),
+                      margin: EdgeInsets.only(bottom: 12.h),
                       child: InkWell(
                         onTap: () {
                           Navigator.push(
@@ -43,7 +45,7 @@ class OrderHistoryScreen extends StatelessWidget {
                           );
                         },
                         child: Padding(
-                          padding: const EdgeInsets.all(16),
+                          padding: EdgeInsets.all(16.r),
                           child: Row(
                             children: [
                               Expanded(
@@ -66,17 +68,13 @@ class OrderHistoryScreen extends StatelessWidget {
                                       label: 'Invoice Date',
                                       value: invoice.formattedDate,
                                     ),
-                                    /*_InfoRow(
-                                      label: 'Invoice Date',
-                                      value: invoice.formattedDate,
-                                    ),*/
                                   ],
                                 ),
                               ),
                               Column(
                                 children: [
                                   IconButton(
-                                    icon: const Icon(Icons.delete),
+                                    icon: Icon(Icons.delete, size: 24.i),
                                     onPressed: () {
                                       _showDeleteDialog(
                                         context,
@@ -86,7 +84,7 @@ class OrderHistoryScreen extends StatelessWidget {
                                     },
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.receipt),
+                                    icon: Icon(Icons.receipt, size: 24.i),
                                     onPressed: () {
                                       Navigator.push(
                                         context,
@@ -109,18 +107,18 @@ class OrderHistoryScreen extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16.r),
                 child: Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(16.r),
                   decoration: BoxDecoration(
                     color: const Color(0xFFF8BBD0),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Text(
                     'TOTAL ( ${provider.invoices.length} )',
-                    style: const TextStyle(
-                      fontSize: 16,
+                    style: TextStyle(
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
@@ -142,19 +140,19 @@ class OrderHistoryScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete Invoice'),
-        content: const Text('Are you sure you want to delete this invoice?'),
+        title: Text('Delete Invoice', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
+        content: Text('Are you sure you want to delete this invoice?', style: TextStyle(fontSize: 14.sp)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: Text('Cancel', style: TextStyle(fontSize: 14.sp)),
           ),
           TextButton(
             onPressed: () async {
               await provider.deleteInvoice(invoice.id!);
               Navigator.pop(ctx);
             },
-            child: const Text('Delete'),
+            child: Text('Delete', style: TextStyle(fontSize: 14.sp, color: Colors.red)),
           ),
         ],
       ),
@@ -171,14 +169,14 @@ class _InfoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
+      padding: EdgeInsets.only(bottom: 4.h),
       child: Row(
         children: [
           Text(
             '$label : ',
-            style: const TextStyle(fontWeight: FontWeight.w600),
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14.sp),
           ),
-          Expanded(child: Text(value)),
+          Expanded(child: Text(value, style: TextStyle(fontSize: 14.sp))),
         ],
       ),
     );

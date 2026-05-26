@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:invoicegenerator/models/invoice.dart';
+import 'package:invoicegenerator/utils/responsive.dart';
 import 'package:provider/provider.dart';
 import '../providers/product_provider.dart';
 import '../models/customer.dart';
@@ -56,7 +57,7 @@ class _ProductSelectionForInvoiceScreenState
       context: context,
       builder: (ctx) {
         return AlertDialog(
-          title: Text(product.name),
+          title: Text(product.name, style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -64,34 +65,39 @@ class _ProductSelectionForInvoiceScreenState
               children: [
                 Text(
                   'HSN Code: ${product.hsnCode}',
-                  style: TextStyle(color: Colors.grey.shade600),
+                  style: TextStyle(color: Colors.grey.shade600, fontSize: 14.sp),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 TextField(
                   controller: priceController,
                   keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
+                  style: TextStyle(fontSize: 14.sp),
                   decoration: InputDecoration(
                     labelText: 'Price per Unit',
+                    labelStyle: TextStyle(fontSize: 14.sp),
                     prefixText: '₹ ',
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(8.r),
                     ),
-                    prefixIcon: const Icon(Icons.currency_rupee),
+                    prefixIcon: Icon(Icons.currency_rupee, size: 20.i),
                     helperText: 'You can edit the price for this invoice',
+                    helperStyle: TextStyle(fontSize: 12.sp),
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 TextField(
                   controller: weightController,
                   keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
+                  style: TextStyle(fontSize: 14.sp),
                   decoration: InputDecoration(
                     labelText: 'Quantity/Weight',
+                    labelStyle: TextStyle(fontSize: 14.sp),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(8.r),
                     ),
-                    prefixIcon: const Icon(Icons.scale_outlined),
+                    prefixIcon: Icon(Icons.scale_outlined, size: 20.i),
                   ),
                   autofocus: true,
                 ),
@@ -101,7 +107,7 @@ class _ProductSelectionForInvoiceScreenState
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text('Cancel'),
+              child: Text('Cancel', style: TextStyle(fontSize: 14.sp)),
             ),
             ElevatedButton(
               onPressed: () {
@@ -139,8 +145,9 @@ class _ProductSelectionForInvoiceScreenState
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 foregroundColor: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
               ),
-              child: const Text('Add'),
+              child: Text('Add', style: TextStyle(fontSize: 14.sp)),
             ),
           ],
         );
@@ -166,7 +173,7 @@ class _ProductSelectionForInvoiceScreenState
       context: context,
       builder: (ctx) {
         return AlertDialog(
-          title: Text('Edit ${item.product.name}'),
+          title: Text('Edit ${item.product.name}', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -174,34 +181,39 @@ class _ProductSelectionForInvoiceScreenState
               children: [
                 Text(
                   'HSN Code: ${item.product.hsnCode}',
-                  style: TextStyle(color: Colors.grey.shade600),
+                  style: TextStyle(color: Colors.grey.shade600, fontSize: 14.sp),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 TextField(
                   controller: priceController,
                   keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
+                  style: TextStyle(fontSize: 14.sp),
                   decoration: InputDecoration(
                     labelText: 'Price per Unit',
+                    labelStyle: TextStyle(fontSize: 14.sp),
                     prefixText: '₹ ',
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(8.r),
                     ),
-                    prefixIcon: const Icon(Icons.currency_rupee),
+                    prefixIcon: Icon(Icons.currency_rupee, size: 20.i),
                     helperText: 'Edit price for this invoice only',
+                    helperStyle: TextStyle(fontSize: 12.sp),
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 TextField(
                   controller: weightController,
                   keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
+                  style: TextStyle(fontSize: 14.sp),
                   decoration: InputDecoration(
                     labelText: 'Quantity/Weight',
+                    labelStyle: TextStyle(fontSize: 14.sp),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(8.r),
                     ),
-                    prefixIcon: const Icon(Icons.scale_outlined),
+                    prefixIcon: Icon(Icons.scale_outlined, size: 20.i),
                   ),
                   autofocus: true,
                 ),
@@ -211,7 +223,7 @@ class _ProductSelectionForInvoiceScreenState
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text('Cancel'),
+              child: Text('Cancel', style: TextStyle(fontSize: 14.sp)),
             ),
             ElevatedButton(
               onPressed: () {
@@ -247,8 +259,9 @@ class _ProductSelectionForInvoiceScreenState
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 foregroundColor: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
               ),
-              child: const Text('Update'),
+              child: Text('Update', style: TextStyle(fontSize: 14.sp)),
             ),
           ],
         );
@@ -293,9 +306,10 @@ class _ProductSelectionForInvoiceScreenState
 
   @override
   Widget build(BuildContext context) {
+    Responsive.init(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Select Products'),
+        title: Text('Select Products', style: TextStyle(fontSize: 20.sp)),
         centerTitle: true,
         elevation: 0,
       ),
@@ -303,7 +317,7 @@ class _ProductSelectionForInvoiceScreenState
         children: [
           // Progress Indicator
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16.r),
             color: Colors.blue.shade50,
             child: Row(
               children: [
@@ -321,52 +335,52 @@ class _ProductSelectionForInvoiceScreenState
           // Customer Info
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16.r),
             color: Colors.green.shade50,
             child: Row(
               children: [
                 CircleAvatar(
-                  radius: 24,
+                  radius: 24.r,
                   backgroundColor: Colors.green.shade100,
                   child: Text(
                     widget.customer.name[0].toUpperCase(),
-                    style: const TextStyle(
-                      fontSize: 20,
+                    style: TextStyle(
+                      fontSize: 20.sp,
                       fontWeight: FontWeight.bold,
                       color: Colors.green,
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         widget.customer.name,
-                        style: const TextStyle(
-                          fontSize: 16,
+                        style: TextStyle(
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         widget.customer.mobile,
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 12.sp,
                           color: Colors.grey.shade700,
                         ),
                       ),
                     ],
                   ),
                 ),
-                Icon(Icons.check_circle, color: Colors.green.shade700),
+                Icon(Icons.check_circle, color: Colors.green.shade700, size: 24.i),
               ],
             ),
           ),
 
           // Search Bar
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16.r),
             child: TextField(
               controller: _searchController,
               onChanged: (value) {
@@ -374,12 +388,14 @@ class _ProductSelectionForInvoiceScreenState
                   _searchQuery = value.toLowerCase();
                 });
               },
+              style: TextStyle(fontSize: 14.sp),
               decoration: InputDecoration(
                 hintText: 'Search products...',
-                prefixIcon: const Icon(Icons.search, color: Colors.blue),
+                hintStyle: TextStyle(fontSize: 14.sp),
+                prefixIcon: Icon(Icons.search, color: Colors.blue, size: 24.i),
                 suffixIcon: _searchQuery.isNotEmpty
                     ? IconButton(
-                  icon: const Icon(Icons.clear),
+                  icon: Icon(Icons.clear, size: 24.i),
                   onPressed: () {
                     _searchController.clear();
                     setState(() {
@@ -389,20 +405,20 @@ class _ProductSelectionForInvoiceScreenState
                 )
                     : null,
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                   borderSide: BorderSide(color: Colors.grey.shade300),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                   borderSide: BorderSide(color: Colors.grey.shade300),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: Colors.blue, width: 2),
+                  borderRadius: BorderRadius.circular(12.r),
+                  borderSide: BorderSide(color: Colors.blue, width: 2.r),
                 ),
                 filled: true,
                 fillColor: Colors.grey.shade50,
-                contentPadding: const EdgeInsets.all(16),
+                contentPadding: EdgeInsets.all(16.r),
               ),
             ),
           ),
@@ -410,31 +426,32 @@ class _ProductSelectionForInvoiceScreenState
           // Selected Items Summary
           if (_selectedItems.isNotEmpty)
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              padding: const EdgeInsets.all(12),
+              margin: EdgeInsets.symmetric(horizontal: 16.w),
+              padding: EdgeInsets.all(12.r),
               decoration: BoxDecoration(
                 color: Colors.blue.shade50,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
                 border: Border.all(color: Colors.blue.shade200),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.shopping_cart, color: Colors.blue),
-                  const SizedBox(width: 12),
+                  Icon(Icons.shopping_cart, color: Colors.blue, size: 24.i),
+                  SizedBox(width: 12.w),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           '${_selectedItems.length} items selected',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.bold,
+                            fontSize: 14.sp,
                           ),
                         ),
                         Text(
                           'Total: ₹${_calculateTotal().toStringAsFixed(2)}',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 12.sp,
                             color: Colors.grey.shade700,
                           ),
                         ),
@@ -446,20 +463,20 @@ class _ProductSelectionForInvoiceScreenState
                       showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,
-                        shape: const RoundedRectangleBorder(
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20),
+                            top: Radius.circular(20.r),
                           ),
                         ),
                         builder: (ctx) => _buildSelectedItemsSheet(),
                       );
                     },
-                    child: const Text('View'),
+                    child: Text('View', style: TextStyle(fontSize: 14.sp)),
                   ),
                 ],
               ),
             ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
 
           // Product List
           Expanded(
@@ -472,14 +489,14 @@ class _ProductSelectionForInvoiceScreenState
                       children: [
                         Icon(
                           Icons.inventory_2_outlined,
-                          size: 80,
+                          size: 80.i,
                           color: Colors.grey.shade300,
                         ),
-                        const SizedBox(height: 16),
-                        const Text(
+                        SizedBox(height: 16.h),
+                        Text(
                           'No Products Available',
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.w600,
                             color: Colors.grey,
                           ),
@@ -502,14 +519,14 @@ class _ProductSelectionForInvoiceScreenState
                       children: [
                         Icon(
                           Icons.search_off,
-                          size: 80,
+                          size: 80.i,
                           color: Colors.grey.shade300,
                         ),
-                        const SizedBox(height: 16),
-                        const Text(
+                        SizedBox(height: 16.h),
+                        Text(
                           'No Results Found',
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.w600,
                             color: Colors.grey,
                           ),
@@ -520,7 +537,7 @@ class _ProductSelectionForInvoiceScreenState
                 }
 
                 return ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
                   itemCount: filteredProducts.length,
                   itemBuilder: (context, index) {
                     final product = filteredProducts[index];
@@ -528,59 +545,59 @@ class _ProductSelectionForInvoiceScreenState
                         .any((item) => item.product.name == product.name);
 
                     return Card(
-                      margin: const EdgeInsets.only(bottom: 12),
+                      margin: EdgeInsets.only(bottom: 12.h),
                       elevation: isSelected ? 4 : 2,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12.r),
                         side: isSelected
-                            ? const BorderSide(color: Colors.blue, width: 2)
+                            ? BorderSide(color: Colors.blue, width: 2.r)
                             : BorderSide.none,
                       ),
                       child: InkWell(
                         onTap: () => _showAddProductDialog(product),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12.r),
                         child: Padding(
-                          padding: const EdgeInsets.all(16),
+                          padding: EdgeInsets.all(16.r),
                           child: Row(
                             children: [
                               Container(
-                                width: 50,
-                                height: 50,
+                                width: 50.i,
+                                height: 50.i,
                                 decoration: BoxDecoration(
                                   color: Colors.blue.shade50,
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(10.r),
                                 ),
-                                child: const Icon(
+                                child: Icon(
                                   Icons.inventory_2_outlined,
                                   color: Colors.blue,
-                                  size: 28,
+                                  size: 28.i,
                                 ),
                               ),
-                              const SizedBox(width: 16),
+                              SizedBox(width: 16.w),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       product.name,
-                                      style: const TextStyle(
-                                        fontSize: 16,
+                                      style: TextStyle(
+                                        fontSize: 16.sp,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    const SizedBox(height: 4),
+                                    SizedBox(height: 4.h),
                                     Text(
                                       'HSN: ${product.hsnCode}',
                                       style: TextStyle(
-                                        fontSize: 12,
+                                        fontSize: 12.sp,
                                         color: Colors.grey.shade600,
                                       ),
                                     ),
-                                    const SizedBox(height: 4),
+                                    SizedBox(height: 4.h),
                                     Text(
                                       '₹${product.salePrice.toStringAsFixed(2)}',
-                                      style: const TextStyle(
-                                        fontSize: 16,
+                                      style: TextStyle(
+                                        fontSize: 16.sp,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.green,
                                       ),
@@ -589,16 +606,16 @@ class _ProductSelectionForInvoiceScreenState
                                 ),
                               ),
                               if (isSelected)
-                                const Icon(
+                                Icon(
                                   Icons.check_circle,
                                   color: Colors.blue,
-                                  size: 28,
+                                  size: 28.i,
                                 )
                               else
                                 Icon(
                                   Icons.add_circle_outline,
                                   color: Colors.grey.shade400,
-                                  size: 28,
+                                  size: 28.i,
                                 ),
                             ],
                           ),
@@ -613,14 +630,14 @@ class _ProductSelectionForInvoiceScreenState
         ],
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, -5),
+              blurRadius: 10.r,
+              offset: Offset(0, -5.h),
             ),
           ],
         ),
@@ -628,11 +645,11 @@ class _ProductSelectionForInvoiceScreenState
           child: ElevatedButton(
             onPressed: _selectedItems.isEmpty ? null : _proceedToConfirm,
             style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: EdgeInsets.symmetric(vertical: 16.h),
               backgroundColor: Colors.blue,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
               ),
               elevation: 2,
               disabledBackgroundColor: Colors.grey.shade300,
@@ -644,14 +661,14 @@ class _ProductSelectionForInvoiceScreenState
                   _selectedItems.isEmpty
                       ? 'Select Products to Continue'
                       : 'Next: Review & Confirm',
-                  style: const TextStyle(
-                    fontSize: 16,
+                  style: TextStyle(
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 if (_selectedItems.isNotEmpty) ...[
-                  const SizedBox(width: 8),
-                  const Icon(Icons.arrow_forward),
+                  SizedBox(width: 8.w),
+                  Icon(Icons.arrow_forward, size: 20.i),
                 ],
               ],
             ),
@@ -662,6 +679,7 @@ class _ProductSelectionForInvoiceScreenState
   }
 
   Widget _buildSelectedItemsSheet() {
+    Responsive.init(context);
     return DraggableScrollableSheet(
       initialChildSize: 0.7,
       minChildSize: 0.5,
@@ -671,7 +689,7 @@ class _ProductSelectionForInvoiceScreenState
         return Column(
           children: [
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.r),
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(color: Colors.grey.shade200),
@@ -679,18 +697,18 @@ class _ProductSelectionForInvoiceScreenState
               ),
               child: Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Text(
                       'Selected Products',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close),
+                    icon: Icon(Icons.close, size: 24.i),
                   ),
                 ],
               ),
@@ -698,14 +716,14 @@ class _ProductSelectionForInvoiceScreenState
             Expanded(
               child: ListView.builder(
                 controller: scrollController,
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16.r),
                 itemCount: _selectedItems.length,
                 itemBuilder: (context, index) {
                   final item = _selectedItems[index];
                   return Card(
-                    margin: const EdgeInsets.only(bottom: 12),
+                    margin: EdgeInsets.only(bottom: 12.h),
                     child: Padding(
-                      padding: const EdgeInsets.all(12),
+                      padding: EdgeInsets.all(12.r),
                       child: Row(
                         children: [
                           Expanded(
@@ -714,24 +732,26 @@ class _ProductSelectionForInvoiceScreenState
                               children: [
                                 Text(
                                   item.product.name,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.bold,
+                                    fontSize: 14.sp,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
+                                SizedBox(height: 4.h),
                                 Text(
                                   'Qty: ${item.netWeight} × ₹${item.product.salePrice.toStringAsFixed(2)}',
                                   style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: 12.sp,
                                     color: Colors.grey.shade600,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
+                                SizedBox(height: 4.h),
                                 Text(
                                   '₹${item.total.toStringAsFixed(2)}',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.green,
+                                    fontSize: 14.sp,
                                   ),
                                 ),
                               ],
@@ -742,7 +762,7 @@ class _ProductSelectionForInvoiceScreenState
                               Navigator.pop(context);
                               _editItem(index);
                             },
-                            icon: const Icon(Icons.edit_outlined),
+                            icon: Icon(Icons.edit_outlined, size: 20.i),
                             color: Colors.blue,
                           ),
                           IconButton(
@@ -752,7 +772,7 @@ class _ProductSelectionForInvoiceScreenState
                                 Navigator.pop(context);
                               }
                             },
-                            icon: const Icon(Icons.delete_outline),
+                            icon: Icon(Icons.delete_outline, size: 20.i),
                             color: Colors.red,
                           ),
                         ],
@@ -763,7 +783,7 @@ class _ProductSelectionForInvoiceScreenState
               ),
             ),
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.r),
               decoration: BoxDecoration(
                 color: Colors.grey.shade100,
                 border: Border(
@@ -773,17 +793,17 @@ class _ProductSelectionForInvoiceScreenState
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Total:',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     '₹${_calculateTotal().toStringAsFixed(2)}',
-                    style: const TextStyle(
-                      fontSize: 20,
+                    style: TextStyle(
+                      fontSize: 20.sp,
                       fontWeight: FontWeight.bold,
                       color: Colors.green,
                     ),
@@ -802,8 +822,8 @@ class _ProductSelectionForInvoiceScreenState
       child: Column(
         children: [
           Container(
-            width: 32,
-            height: 32,
+            width: 32.i,
+            height: 32.i,
             decoration: BoxDecoration(
               color: isActive ? Colors.blue : Colors.grey.shade300,
               shape: BoxShape.circle,
@@ -814,16 +834,16 @@ class _ProductSelectionForInvoiceScreenState
                 style: TextStyle(
                   color: isActive ? Colors.white : Colors.grey.shade600,
                   fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  fontSize: 14.sp,
                 ),
               ),
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4.h),
           Text(
             label,
             style: TextStyle(
-              fontSize: 10,
+              fontSize: 10.sp,
               color: isActive ? Colors.blue : Colors.grey.shade600,
               fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
             ),
@@ -836,8 +856,8 @@ class _ProductSelectionForInvoiceScreenState
   Widget _buildStepConnector(bool isActive) {
     return Expanded(
       child: Container(
-        height: 2,
-        margin: const EdgeInsets.only(bottom: 20),
+        height: 2.h,
+        margin: EdgeInsets.only(bottom: 20.h),
         color: isActive ? Colors.blue : Colors.grey.shade300,
       ),
     );

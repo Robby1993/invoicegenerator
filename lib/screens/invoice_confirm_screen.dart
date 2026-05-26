@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:invoicegenerator/utils/responsive.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../models/customer.dart';
@@ -84,39 +85,39 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
         barrierDismissible: false,
         builder: (ctx) => AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16.r),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                width: 80,
-                height: 80,
+                width: 80.i,
+                height: 80.i,
                 decoration: BoxDecoration(
                   color: Colors.green.shade100,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.check_circle,
                   color: Colors.green,
-                  size: 50,
+                  size: 50.i,
                 ),
               ),
-              const SizedBox(height: 24),
-              const Text(
+              SizedBox(height: 24.h),
+              Text(
                 'Invoice Generated!',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8.h),
               Text(
                 'Invoice #$invoiceNo',
-                style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+                style: TextStyle(fontSize: 16.sp, color: Colors.grey.shade600),
               ),
-              const SizedBox(height: 24),
-              const Text(
+              SizedBox(height: 24.h),
+              Text(
                 'Your invoice has been successfully created and saved.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14),
+                style: TextStyle(fontSize: 14.sp),
               ),
             ],
           ),
@@ -131,7 +132,7 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
                   (route) => route.isFirst,
                 );
               },
-              child: const Text('View Invoice'),
+              child: Text('View Invoice', style: TextStyle(fontSize: 14.sp)),
             ),
             ElevatedButton(
               onPressed: () {
@@ -142,7 +143,7 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
                 backgroundColor: Colors.blue,
                 foregroundColor: Colors.white,
               ),
-              child: const Text('Done'),
+              child: Text('Done', style: TextStyle(fontSize: 14.sp)),
             ),
           ],
         ),
@@ -156,10 +157,7 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //  final subtotal = _calculateSubtotal();
-    // final igst = _calculateIGST();
-    // final grandTotal = _calculateGrandTotal();
-
+    Responsive.init(context);
     final subtotal = _calculateSubtotal();
     final bool isInterState = widget.gstType == GstTransactionType.interState;
 
@@ -180,7 +178,7 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Review & Confirm'),
+        title: Text('Review & Confirm', style: TextStyle(fontSize: 20.sp)),
         centerTitle: true,
         elevation: 0,
       ),
@@ -189,7 +187,7 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
           children: [
             // Progress Indicator
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.r),
               color: Colors.blue.shade50,
               child: Row(
                 children: [
@@ -206,15 +204,15 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
 
             // Invoice Details Section
             Container(
-              margin: const EdgeInsets.all(16),
+              margin: EdgeInsets.all(16.r),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 2),
+                    blurRadius: 10.r,
+                    offset: Offset(0, 2.h),
                   ),
                 ],
               ),
@@ -222,21 +220,21 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(16.r),
                     decoration: BoxDecoration(
                       color: Colors.blue.shade50,
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(12),
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(12.r),
                       ),
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.receipt_long, color: Colors.black),
-                        const SizedBox(width: 12),
-                        const Text(
+                        Icon(Icons.receipt_long, color: Colors.black, size: 24.i),
+                        SizedBox(width: 12.w),
+                        Text(
                           'Invoice Details',
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -244,7 +242,7 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(16.r),
                     child: Column(
                       children: [
                         _buildInfoRow(
@@ -303,15 +301,15 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
 
             // Customer Section
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
+              margin: EdgeInsets.symmetric(horizontal: 16.r),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 2),
+                    blurRadius: 10.r,
+                    offset: Offset(0, 2.h),
                   ),
                 ],
               ),
@@ -319,21 +317,21 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(16.r),
                     decoration: BoxDecoration(
                       color: Colors.green.shade50,
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(12),
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(12.r),
                       ),
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.person, color: Colors.green),
-                        const SizedBox(width: 12),
-                        const Text(
+                        Icon(Icons.person, color: Colors.green, size: 24.i),
+                        SizedBox(width: 12.w),
+                        Text(
                           'Customer Information',
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -341,57 +339,58 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(16.r),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           widget.customer.name,
-                          style: const TextStyle(
-                            fontSize: 18,
+                          style: TextStyle(
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8.h),
                         Row(
                           children: [
                             Icon(
                               Icons.phone,
-                              size: 16,
+                              size: 16.i,
                               color: Colors.grey.shade600,
                             ),
-                            const SizedBox(width: 8),
-                            Text(widget.customer.mobile),
+                            SizedBox(width: 8.w),
+                            Text(widget.customer.mobile, style: TextStyle(fontSize: 14.sp)),
                           ],
                         ),
-                        const SizedBox(height: 4),
+                        SizedBox(height: 4.h),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Icon(
                               Icons.location_on,
-                              size: 16,
+                              size: 16.i,
                               color: Colors.grey.shade600,
                             ),
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8.w),
                             Expanded(
                               child: Text(
                                 '${widget.customer.address}, ${widget.customer.city}, ${widget.customer.state} - ${widget.customer.pincode}',
+                                style: TextStyle(fontSize: 14.sp),
                               ),
                             ),
                           ],
                         ),
                         if (widget.customer.gstNumber.isNotEmpty) ...[
-                          const SizedBox(height: 4),
+                          SizedBox(height: 4.h),
                           Row(
                             children: [
                               Icon(
                                 Icons.badge,
-                                size: 16,
+                                size: 16.i,
                                 color: Colors.grey.shade600,
                               ),
-                              const SizedBox(width: 8),
-                              Text('GST: ${widget.customer.gstNumber}'),
+                              SizedBox(width: 8.w),
+                              Text('GST: ${widget.customer.gstNumber}', style: TextStyle(fontSize: 14.sp)),
                             ],
                           ),
                         ],
@@ -402,40 +401,40 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
               ),
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
 
             // Products Section
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
+              margin: EdgeInsets.symmetric(horizontal: 16.r),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 2),
+                    blurRadius: 10.r,
+                    offset: Offset(0, 2.h),
                   ),
                 ],
               ),
               child: Column(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(16.r),
                     decoration: BoxDecoration(
                       color: Colors.orange.shade50,
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(12),
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(12.r),
                       ),
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.inventory_2, color: Colors.orange),
-                        const SizedBox(width: 12),
+                        Icon(Icons.inventory_2, color: Colors.orange, size: 24.i),
+                        SizedBox(width: 12.w),
                         Text(
                           'Products (${widget.items.length})',
-                          style: const TextStyle(
-                            fontSize: 18,
+                          style: TextStyle(
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -445,56 +444,57 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
                   ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(16.r),
                     itemCount: widget.items.length,
-                    separatorBuilder: (_, __) => const Divider(height: 24),
+                    separatorBuilder: (_, __) => Divider(height: 24.h),
                     itemBuilder: (context, index) {
                       final item = widget.items[index];
                       return Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            width: 40,
-                            height: 40,
+                            width: 40.i,
+                            height: 40.i,
                             decoration: BoxDecoration(
                               color: Colors.blue.shade50,
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(8.r),
                             ),
                             child: Center(
                               child: Text(
                                 '${index + 1}',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
+                                  fontSize: 14.sp,
                                 ),
                               ),
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          SizedBox(width: 12.w),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   item.product.name,
-                                  style: const TextStyle(
-                                    fontSize: 16,
+                                  style: TextStyle(
+                                    fontSize: 16.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
+                                SizedBox(height: 4.h),
                                 Text(
                                   'HSN: ${item.product.hsnCode}',
                                   style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: 12.sp,
                                     color: Colors.grey.shade600,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
+                                SizedBox(height: 4.h),
                                 Text(
                                   'Qty: ${item.netWeight} × ₹${item.product.salePrice.toStringAsFixed(2)}',
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 14.sp,
                                     color: Colors.grey.shade700,
                                   ),
                                 ),
@@ -503,8 +503,8 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
                           ),
                           Text(
                             '₹${item.total.toStringAsFixed(2)}',
-                            style: const TextStyle(
-                              fontSize: 16,
+                            style: TextStyle(
+                              fontSize: 16.sp,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -516,85 +516,15 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
               ),
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
 
             // Totals Section
-            /*  Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade50,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.grey.shade200),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Subtotal',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        '₹${subtotal.toStringAsFixed(2)}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-
-
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'IGST (${widget.igst.toStringAsFixed(2)}%)',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        '₹${igst.toStringAsFixed(2)}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Divider(height: 24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Grand Total',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        '₹${grandTotal.toStringAsFixed(2)}',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),*/
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              padding: const EdgeInsets.all(16),
+              margin: EdgeInsets.symmetric(horizontal: 16.r),
+              padding: EdgeInsets.all(16.r),
               decoration: BoxDecoration(
                 color: Colors.grey.shade50,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
                 border: Border.all(color: Colors.grey.shade200),
               ),
               child: Column(
@@ -615,26 +545,26 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
                     ),
                   ],
 
-                  const Divider(height: 24),
+                  Divider(height: 24.h),
 
                   _totalRow('Grand Total', grandTotal, isGrand: true),
                 ],
               ),
             ),
 
-            const SizedBox(height: 100),
+            SizedBox(height: 100.h),
           ],
         ),
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, -5),
+              blurRadius: 10.r,
+              offset: Offset(0, -5.h),
             ),
           ],
         ),
@@ -642,32 +572,32 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
           child: ElevatedButton(
             onPressed: _isGenerating ? null : _generateInvoice,
             style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: EdgeInsets.symmetric(vertical: 16.h),
               backgroundColor: Colors.green,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
               ),
               elevation: 2,
             ),
             child: _isGenerating
-                ? const SizedBox(
-                    height: 24,
-                    width: 24,
-                    child: CircularProgressIndicator(
+                ? SizedBox(
+                    height: 24.i,
+                    width: 24.i,
+                    child: const CircularProgressIndicator(
                       strokeWidth: 2,
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
                   )
-                : const Row(
+                : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.check_circle_outline, size: 24),
-                      SizedBox(width: 12),
+                      Icon(Icons.check_circle_outline, size: 24.i),
+                      SizedBox(width: 12.w),
                       Text(
                         'Generate Invoice',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -681,21 +611,21 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
 
   Widget _totalRow(String label, double value, {bool isGrand = false}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: EdgeInsets.symmetric(vertical: 6.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             label,
             style: TextStyle(
-              fontSize: isGrand ? 18 : 16,
+              fontSize: isGrand ? 18.sp : 16.sp,
               fontWeight: isGrand ? FontWeight.bold : FontWeight.normal,
             ),
           ),
           Text(
             '₹${value.toStringAsFixed(2)}',
             style: TextStyle(
-              fontSize: isGrand ? 22 : 16,
+              fontSize: isGrand ? 22.sp : 16.sp,
               fontWeight: FontWeight.bold,
               color: isGrand ? Colors.green : Colors.black,
             ),
@@ -710,30 +640,30 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
       child: Column(
         children: [
           Container(
-            width: 32,
-            height: 32,
+            width: 32.i,
+            height: 32.i,
             decoration: BoxDecoration(
               color: isActive ? Colors.black : Colors.grey.shade300,
               shape: BoxShape.circle,
             ),
             child: Center(
               child: isActive
-                  ? const Icon(Icons.check, color: Colors.white, size: 18)
+                  ? Icon(Icons.check, color: Colors.white, size: 18.i)
                   : Text(
                       '$step',
                       style: TextStyle(
                         color: Colors.grey.shade600,
                         fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                        fontSize: 14.sp,
                       ),
                     ),
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4.h),
           Text(
             label,
             style: TextStyle(
-              fontSize: 10,
+              fontSize: 10.sp,
               color: isActive ? Colors.black : Colors.grey.shade600,
               fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
             ),
@@ -746,8 +676,8 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
   Widget _buildStepConnector(bool isActive) {
     return Expanded(
       child: Container(
-        height: 2,
-        margin: const EdgeInsets.only(bottom: 20),
+        height: 2.h,
+        margin: EdgeInsets.only(bottom: 20.h),
         color: isActive ? Colors.black : Colors.grey.shade300,
       ),
     );
@@ -755,24 +685,24 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
 
   Widget _buildInfoRow(String label, String value, IconData icon) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.only(bottom: 12.h),
       child: Row(
         children: [
-          Icon(icon, size: 20, color: Colors.grey.shade600),
-          const SizedBox(width: 12),
+          Icon(icon, size: 20.i, color: Colors.grey.shade600),
+          SizedBox(width: 12.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   label,
-                  style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                  style: TextStyle(fontSize: 12.sp, color: Colors.grey.shade600),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2.h),
                 Text(
                   value,
-                  style: const TextStyle(
-                    fontSize: 14,
+                  style: TextStyle(
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

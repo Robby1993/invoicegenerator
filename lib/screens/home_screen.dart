@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:invoicegenerator/screens/billing_detail_screen.dart';
+import 'package:invoicegenerator/utils/responsive.dart';
 import 'product_list_screen.dart';
 import 'customer_list_screen.dart';
 import 'order_history_screen.dart';
@@ -30,34 +31,35 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   void showExitDialog(BuildContext context) {
+    Responsive.init(context);
     showDialog(
       context: context,
       barrierDismissible: false, // Prevent dismiss on outside touch
       builder: (context) => Dialog(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: EdgeInsets.all(20.0.r),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
+              Icon(
                 Icons.exit_to_app,
-                size: 48,
+                size: 48.i,
                 color: Colors.black,
               ),
-              const SizedBox(height: 16),
-              const Text(
+              SizedBox(height: 16.h),
+              Text(
                 "Exit App",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12.h),
               const Text(
                 "Are you sure you want to exit the app?",
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -65,21 +67,23 @@ class HomeScreenState extends State<HomeScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.grey[300],
                       foregroundColor: Colors.black,
+                      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
                     ),
                     onPressed: () => Navigator.pop(context),
-                    child: const Text("Cancel"),
+                    child: Text("Cancel", style: TextStyle(fontSize: 14.sp)),
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
+                      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
                     ),
                     onPressed: () {
                       Navigator.pop(context);
                       SystemNavigator.pop();
                     },
-                    child: const Text(
+                    child: Text(
                       "Exit",
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white, fontSize: 14.sp),
                     ),
                   ),
                 ],
@@ -94,6 +98,7 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Responsive.init(context);
     return PopScope(
       canPop: false, // Override default back behavior
       onPopInvokedWithResult: (didPop, result) {
@@ -106,7 +111,7 @@ class HomeScreenState extends State<HomeScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Invoice App'),
+          title: Text('Invoice App', style: TextStyle(fontSize: 20.sp)),
         ),
         body: LayoutBuilder(
           builder: (context, constraints) {
@@ -115,11 +120,11 @@ class HomeScreenState extends State<HomeScreen> {
             final childAspectRatio = isWide ? 1.2 : 1.0;
 
             return Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.r),
               child: GridView.count(
                 crossAxisCount: crossAxisCount,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
+                mainAxisSpacing: 16.h,
+                crossAxisSpacing: 16.w,
                 childAspectRatio: childAspectRatio,
                 children: [
                   _MenuCard(
@@ -177,23 +182,24 @@ class _MenuCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Responsive.init(context);
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 64),
-            const SizedBox(height: 12),
+            Icon(icon, size: 64.i),
+            SizedBox(height: 12.h),
             Text(
               title,
-              style: const TextStyle(
-                fontSize: 16,
+              style: TextStyle(
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
               ),
               textAlign: TextAlign.center,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:invoicegenerator/utils/responsive.dart';
 import 'package:provider/provider.dart';
 import '../providers/product_provider.dart';
 import '../models/invoice_item.dart';
@@ -24,29 +25,6 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
     _searchController.dispose();
     super.dispose();
   }
-
-  /*void _addProduct1() {
-    if (_selectedProduct != null) {
-      final weight = double.tryParse(_weightController.text) ?? 0;
-      if (weight > 0) {
-        setState(() {
-          _selectedItems.add(
-            InvoiceItem(product: _selectedProduct!, netWeight: weight),
-          );
-          _weightController.text = '0';
-          _selectedProduct = null;
-        });
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please enter a valid weight')),
-        );
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a product')),
-      );
-    }
-  }*/
 
   void _addProduct() {
     if (_selectedProduct != null) {
@@ -81,12 +59,13 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Responsive.init(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Product Selection'),
+        title: Text('Product Selection', style: TextStyle(fontSize: 20.sp)),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
+            icon: Icon(Icons.search, size: 24.i),
             onPressed: () => _showSearchDialog(),
           ),
         ],
@@ -108,55 +87,57 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
     return Consumer<ProductProvider>(
       builder: (context, provider, _) {
         if (provider.products.isEmpty) {
-          return const Center(child: Text('No products available'));
+          return Center(child: Text('No products available', style: TextStyle(fontSize: 16.sp)));
         }
 
         final product = _selectedProduct ?? provider.products.first;
         return SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16.r),
           child: Card(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.r),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _InfoRow(label: 'Product Name', value: product.name),
                   _InfoRow(label: 'HSN Code', value: product.hsnCode),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8.h),
                   Row(
                     children: [
-                      const Text('Sale Price : '),
+                      Text('Sale Price : ', style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600)),
                       Expanded(
                         child: TextFormField(
                           initialValue: product.salePrice.toString(),
-                          decoration: const InputDecoration(
+                          style: TextStyle(fontSize: 14.sp),
+                          decoration: InputDecoration(
                             isDense: true,
-                            border: OutlineInputBorder(),
-                            contentPadding: EdgeInsets.all(12),
+                            border: const OutlineInputBorder(),
+                            contentPadding: EdgeInsets.all(12.r),
                           ),
                           readOnly: true,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12.h),
                   Row(
                     children: [
-                      const Text('Net Weight : '),
+                      Text('Net Weight : ', style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600)),
                       Expanded(
                         child: TextFormField(
                           controller: _weightController,
-                          decoration: const InputDecoration(
+                          style: TextStyle(fontSize: 14.sp),
+                          decoration: InputDecoration(
                             isDense: true,
-                            border: OutlineInputBorder(),
-                            contentPadding: EdgeInsets.all(12),
+                            border: const OutlineInputBorder(),
+                            contentPadding: EdgeInsets.all(12.r),
                           ),
                           keyboardType: const TextInputType.numberWithOptions(decimal: true),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12.h),
                   _InfoRow(label: 'Total', value: _calculateTotal(product)),
                 ],
               ),
@@ -174,14 +155,14 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
 
   Widget _buildSelectedItemsList() {
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16.r),
       itemCount: _selectedItems.length,
       itemBuilder: (context, index) {
         final item = _selectedItems[index];
         return Card(
-          margin: const EdgeInsets.only(bottom: 12),
+          margin: EdgeInsets.only(bottom: 12.h),
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16.r),
             child: Row(
               children: [
                 Expanded(
@@ -206,7 +187,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.close),
+                  icon: Icon(Icons.close, size: 24.i),
                   onPressed: () {
                     setState(() => _selectedItems.removeAt(index));
                   },
@@ -221,7 +202,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
 
   Widget _buildBottomButtons() {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16.r),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -230,31 +211,25 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
             child: ElevatedButton(
               onPressed: _addProduct,
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16.r),
                 backgroundColor: const Color(0xFFF8BBD0),
               ),
-              child: const Text('ADD NEW PRODUCT'),
+              child: Text('ADD NEW PRODUCT', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               onPressed: _selectedItems.isEmpty
                   ? null
                   : () {
-                      /*Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => BillingDetailScreen(items: _selectedItems),
-                        ),
-                      );*/
                     },
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16.r),
                 backgroundColor: const Color(0xFFF8BBD0),
               ),
-              child: const Text('SHOW PRODUCT'),
+              child: Text('SHOW PRODUCT', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
             ),
           ),
         ],
@@ -269,7 +244,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
         return Consumer<ProductProvider>(
           builder: (context, provider, _) {
             return AlertDialog(
-              title: const Text('Select Product'),
+              title: Text('Select Product', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
               content: SizedBox(
                 width: double.maxFinite,
                 child: ListView.builder(
@@ -278,8 +253,8 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                   itemBuilder: (context, index) {
                     final product = provider.products[index];
                     return ListTile(
-                      title: Text(product.name),
-                      subtitle: Text('HSN: ${product.hsnCode}'),
+                      title: Text(product.name, style: TextStyle(fontSize: 14.sp)),
+                      subtitle: Text('HSN: ${product.hsnCode}', style: TextStyle(fontSize: 12.sp)),
                       onTap: () {
                         setState(() => _selectedProduct = product);
                         Navigator.pop(ctx);
@@ -305,11 +280,11 @@ class _InfoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: EdgeInsets.only(bottom: 8.h),
       child: Row(
         children: [
-          Text('$label : ', style: const TextStyle(fontWeight: FontWeight.w600)),
-          Expanded(child: Text(value)),
+          Text('$label : ', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14.sp)),
+          Expanded(child: Text(value, style: TextStyle(fontSize: 14.sp))),
         ],
       ),
     );

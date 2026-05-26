@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:invoicegenerator/utils/responsive.dart';
 import 'package:provider/provider.dart';
 import '../providers/product_provider.dart';
 import 'add_product_screen.dart';
@@ -8,18 +9,19 @@ class ProductListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Responsive.init(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Product List'),
+        title: Text('Product List', style: TextStyle(fontSize: 20.sp)),
       ),
       body: Consumer<ProductProvider>(
         builder: (context, provider, _) {
           if (provider.products.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
                 'Data not found',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -27,14 +29,14 @@ class ProductListScreen extends StatelessWidget {
           }
 
           return ListView.builder(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16.r),
             itemCount: provider.products.length,
             itemBuilder: (context, index) {
               final product = provider.products[index];
               return Card(
-                margin: const EdgeInsets.only(bottom: 12),
+                margin: EdgeInsets.only(bottom: 12.h),
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(16.r),
                   child: Row(
                     children: [
                       Expanded(
@@ -53,13 +55,13 @@ class ProductListScreen extends StatelessWidget {
                       Column(
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.delete),
+                            icon: Icon(Icons.delete, size: 24.i),
                             onPressed: () {
                               _showDeleteDialog(context, provider, index);
                             },
                           ),
                           IconButton(
-                            icon: const Icon(Icons.edit),
+                            icon: Icon(Icons.edit, size: 24.i),
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -89,7 +91,7 @@ class ProductListScreen extends StatelessWidget {
             MaterialPageRoute(builder: (_) => const AddProductScreen()),
           );
         },
-        child: const Icon(Icons.add),
+        child: Icon(Icons.add, size: 24.i),
       ),
     );
   }
@@ -102,19 +104,19 @@ class ProductListScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete Product'),
-        content: const Text('Are you sure you want to delete this product?'),
+        title: Text('Delete Product', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
+        content: Text('Are you sure you want to delete this product?', style: TextStyle(fontSize: 14.sp)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: Text('Cancel', style: TextStyle(fontSize: 14.sp)),
           ),
           TextButton(
             onPressed: () {
               provider.deleteProduct(index);
               Navigator.pop(ctx);
             },
-            child: const Text('Delete'),
+            child: Text('Delete', style: TextStyle(fontSize: 14.sp, color: Colors.red)),
           ),
         ],
       ),
@@ -131,14 +133,14 @@ class _InfoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
+      padding: EdgeInsets.only(bottom: 4.h),
       child: Row(
         children: [
           Text(
             '$label : ',
-            style: const TextStyle(fontWeight: FontWeight.w600),
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14.sp),
           ),
-          Expanded(child: Text(value)),
+          Expanded(child: Text(value, style: TextStyle(fontSize: 14.sp))),
         ],
       ),
     );

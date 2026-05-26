@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:invoicegenerator/utils/responsive.dart';
 import 'package:printing/printing.dart';
 import 'package:pdf/pdf.dart';
 import '../models/invoice.dart';
@@ -11,19 +12,20 @@ class InvoicePreviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Responsive.init(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Invoice ${invoice.invoiceNo}'),
+        title: Text('Invoice ${invoice.invoiceNo}', style: TextStyle(fontSize: 20.sp)),
         centerTitle: true,
         elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.share),
+            icon: Icon(Icons.share, size: 24.i),
             tooltip: 'Share Invoice',
             onPressed: () => _sharePdf(context),
           ),
           IconButton(
-            icon: const Icon(Icons.download),
+            icon: Icon(Icons.download, size: 24.i),
             tooltip: 'Download PDF',
             onPressed: () => _downloadPdf(context),
           ),
@@ -37,14 +39,14 @@ class InvoicePreviewScreen extends StatelessWidget {
         pdfFileName: 'Invoice_${invoice.invoiceNo}.pdf',
         actions: [
           PdfPreviewAction(
-            icon: const Icon(Icons.print),
+            icon: Icon(Icons.print, size: 24.i, color: Colors.white),
             onPressed: (context, build, pageFormat) async {
               await _printPdf(context);
             },
           ),
         ],
         initialPageFormat: PdfPageFormat.a4,
-        maxPageWidth: 700,
+        maxPageWidth: 700.w,
       ),
     );
   }
@@ -60,7 +62,7 @@ class InvoicePreviewScreen extends StatelessWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error sharing PDF: $e'),
+            content: Text('Error sharing PDF: $e', style: TextStyle(fontSize: 14.sp)),
             backgroundColor: Colors.red,
           ),
         );
@@ -78,10 +80,10 @@ class InvoicePreviewScreen extends StatelessWidget {
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('PDF ready to download'),
+          SnackBar(
+            content: Text('PDF ready to download', style: TextStyle(fontSize: 14.sp)),
             backgroundColor: Colors.green,
-            duration: Duration(seconds: 2),
+            duration: const Duration(seconds: 2),
           ),
         );
       }
@@ -89,7 +91,7 @@ class InvoicePreviewScreen extends StatelessWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error downloading PDF: $e'),
+            content: Text('Error downloading PDF: $e', style: TextStyle(fontSize: 14.sp)),
             backgroundColor: Colors.red,
           ),
         );
@@ -107,7 +109,7 @@ class InvoicePreviewScreen extends StatelessWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error printing PDF: $e'),
+            content: Text('Error printing PDF: $e', style: TextStyle(fontSize: 14.sp)),
             backgroundColor: Colors.red,
           ),
         );
