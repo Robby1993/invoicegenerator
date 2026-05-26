@@ -23,9 +23,9 @@ class Product {
   factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
       id: map['id'],
-      name: map['name'],
-      hsnCode: map['hsnCode'],
-      salePrice: map['salePrice'],
+      name: map['name'] ?? '',
+      hsnCode: map['hsnCode'] ?? '',
+      salePrice: (map['salePrice'] as num?)?.toDouble() ?? 0.0,
     );
   }
 

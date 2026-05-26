@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:invoicegenerator/database_helper.dart';
-import 'package:invoicegenerator/models/customer.dart';
-import 'package:invoicegenerator/models/product.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
@@ -103,13 +101,31 @@ class BackupService {
         allowedExtensions: ['json'],
       );
 
-      if (result != null) {
+      if (result != null && result.files.single.path != null) {
         File file = File(result.files.single.path!);
         String content = await file.readAsString();
         Map<String, dynamic> data = jsonDecode(content);
 
-        final db = DatabaseHelper.instance;
-        await db.clearAllData();
+        return await _robustImport(data);
+      }
+      return false;
+    } catch (e) {
+      print('Import error: $e');
+      return false;
+    }
+  }
+
+  static Future<bool> _robustImport(Map<String, dynamic> data) async {
+    try {
+      final dbHelper = DatabaseHelper.instance;
+      final db = await dbHelper.database;
+
+      await db.transaction((txn) async {
+        // 0. Clear existing data inside the transaction
+        await txn.delete('invoice_items');
+        await txn.delete('invoices');
+        await txn.delete('products');
+        await txn.delete('customers');
 
         // 1. Import Customers (Mapping IDs)
         Map<int, int> customerIdMap = {};
@@ -117,7 +133,7 @@ class BackupService {
           for (var c in data['customers']) {
             int oldId = c['id'];
             c.remove('id');
-            int newId = await db.insertCustomer(Customer.fromMap(c));
+            int newId = await txn.insert('customers', c);
             customerIdMap[oldId] = newId;
           }
         }
@@ -128,95 +144,36 @@ class BackupService {
           for (var p in data['products']) {
             int oldId = p['id'];
             p.remove('id');
-            int newId = await db.insertProduct(Product.fromMap(p));
+            int newId = await txn.insert('products', p);
             productIdMap[oldId] = newId;
           }
         }
 
-        // 3. Import Invoices
+        // 3. Import Invoices & Items
         if (data['invoices'] != null) {
           for (var inv in data['invoices']) {
-            List<dynamic> itemsData = inv['items'];
+            List<dynamic> itemsData = inv['items'] ?? [];
             inv.remove('id');
             inv.remove('items');
-            
-            // Update customer ID
+
             inv['customerId'] = customerIdMap[inv['customerId']];
+            int newInvoiceId = await txn.insert('invoices', inv);
 
-            // Manual reconstruction to avoid using fromMap which might expect objects
-            // We'll insert invoice first then items
-            final items = itemsData.map((itemData) {
-              // We need to resolve the product first, but we can't easily without fetching from DB
-              // or having the product object. 
-              // Better approach: adjust DatabaseHelper to allow inserting items with just productId.
-              return itemData; // temporarily
-            }).toList();
-
-            // To keep it simple, I'll just rely on the existing insertInvoice but I need to prepare the items
-            // Actually, I'll just use raw SQL or a simpler insert in DatabaseHelper for this.
-            // For now, let's assume we fetch products again or map them.
+            for (var item in itemsData) {
+              await txn.insert('invoice_items', {
+                'invoiceId': newInvoiceId,
+                'productId': productIdMap[item['productId']],
+                'netWeight': (item['netWeight'] as num?)?.toDouble() ?? 0.0,
+                'total': (item['total'] as num?)?.toDouble() ?? 0.0,
+              });
+            }
           }
         }
-        
-        // Re-implementing import logic more robustly
-        await _robustImport(data);
-
-        return true;
-      }
-      return false;
+      });
+      return true;
     } catch (e) {
-      print('Import error: $e');
+      print('Robust import error: $e');
       return false;
     }
-  }
-
-  static Future<void> _robustImport(Map<String, dynamic> data) async {
-    final dbHelper = DatabaseHelper.instance;
-    final db = await dbHelper.database;
-
-    await db.transaction((txn) async {
-      // 1. Customers
-      Map<int, int> customerIdMap = {};
-      if (data['customers'] != null) {
-        for (var c in data['customers']) {
-          int oldId = c['id'];
-          c.remove('id');
-          int newId = await txn.insert('customers', c);
-          customerIdMap[oldId] = newId;
-        }
-      }
-
-      // 2. Products
-      Map<int, int> productIdMap = {};
-      if (data['products'] != null) {
-        for (var p in data['products']) {
-          int oldId = p['id'];
-          p.remove('id');
-          int newId = await txn.insert('products', p);
-          productIdMap[oldId] = newId;
-        }
-      }
-
-      // 3. Invoices & Items
-      if (data['invoices'] != null) {
-        for (var inv in data['invoices']) {
-          List<dynamic> itemsData = inv['items'];
-          inv.remove('id');
-          inv.remove('items');
-          
-          inv['customerId'] = customerIdMap[inv['customerId']];
-          int newInvoiceId = await txn.insert('invoices', inv);
-
-          for (var item in itemsData) {
-            await txn.insert('invoice_items', {
-              'invoiceId': newInvoiceId,
-              'productId': productIdMap[item['productId']],
-              'netWeight': item['netWeight'],
-              'total': item['total'],
-            });
-          }
-        }
-      }
-    });
   }
 }
