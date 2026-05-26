@@ -8,7 +8,8 @@ import '../models/customer.dart';
 import 'customer_selection_screen.dart';
 
 class BillingDetailScreen extends StatefulWidget {
-  const BillingDetailScreen({super.key});
+  final Invoice? invoice;
+  const BillingDetailScreen({super.key, this.invoice});
 
   @override
   State<BillingDetailScreen> createState() => _BillingDetailScreenState();
@@ -30,6 +31,15 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
   @override
   void initState() {
     super.initState();
+    if (widget.invoice != null) {
+      _challanController.text = widget.invoice!.challanNo;
+      _vehicleController.text = widget.invoice!.vehicleNo;
+      _selectedDate = widget.invoice!.date;
+      _transportController.text = widget.invoice!.transport;
+      _lrController.text = widget.invoice!.lrNo;
+      _igstController.text = widget.invoice!.percent.toString();
+      _gstType = widget.invoice!.gstType;
+    }
     _dateController.text = DateFormat('dd/MM/yyyy').format(_selectedDate);
   }
 
@@ -65,6 +75,8 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
         context,
         MaterialPageRoute(
           builder: (_) => CustomerSelectionScreen(
+            invoiceId: widget.invoice?.id,
+            invoiceNo: widget.invoice?.invoiceNo,
             challanNo: _challanController.text.trim(),
             vehicleNo: _vehicleController.text.trim(),
             date: _selectedDate,
@@ -72,7 +84,8 @@ class _BillingDetailScreenState extends State<BillingDetailScreen> {
             lrNo: _lrController.text.trim(),
             percent: double.tryParse(_igstController.text) ?? 18,
             gstType: _gstType,
-            // isInterState: _gstType == GstTransactionType.interState,
+            existingCustomer: widget.invoice?.customer,
+            existingItems: widget.invoice?.items,
           ),
         ),
       );

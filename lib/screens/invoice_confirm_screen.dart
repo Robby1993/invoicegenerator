@@ -10,6 +10,8 @@ import 'billing_detail_screen.dart';
 import 'invoice_preview_screen.dart';
 
 class InvoiceConfirmScreen extends StatefulWidget {
+  final int? invoiceId;
+  final String? invoiceNo;
   final String challanNo;
   final String vehicleNo;
   final DateTime date;
@@ -22,6 +24,8 @@ class InvoiceConfirmScreen extends StatefulWidget {
 
   const InvoiceConfirmScreen({
     super.key,
+    this.invoiceId,
+    this.invoiceNo,
     required this.challanNo,
     required this.vehicleNo,
     required this.date,
@@ -61,9 +65,10 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
     await Future.delayed(const Duration(milliseconds: 800));
 
     final provider = context.read<InvoiceProvider>();
-    final invoiceNo = await provider.getNextInvoiceNumber();
+    final invoiceNo = widget.invoiceNo ?? await provider.getNextInvoiceNumber();
 
     final invoice = Invoice(
+      id: widget.invoiceId,
       invoiceNo: invoiceNo,
       customer: widget.customer,
       challanNo: widget.challanNo,
@@ -76,7 +81,11 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
       gstType: widget.gstType,
     );
 
-    provider.addInvoice(invoice);
+    if (widget.invoiceId != null) {
+      await provider.updateInvoice(invoice);
+    } else {
+      await provider.addInvoice(invoice);
+    }
 
     if (mounted) {
       // Show success dialog
@@ -105,7 +114,7 @@ class _InvoiceConfirmScreenState extends State<InvoiceConfirmScreen> {
               ),
               SizedBox(height: 24.h),
               Text(
-                'Invoice Generated!',
+                widget.invoiceId != null ? 'Invoice Updated!' : 'Invoice Generated!',
                 style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 8.h),

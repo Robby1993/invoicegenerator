@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:invoicegenerator/screens/billing_detail_screen.dart';
+import 'package:invoicegenerator/screens/settings_screen.dart';
 import 'package:invoicegenerator/utils/responsive.dart';
 import 'product_list_screen.dart';
 import 'customer_list_screen.dart';
@@ -112,6 +113,15 @@ class HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Invoice App', style: TextStyle(fontSize: 20.sp)),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.settings, size: 24.i),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SettingsScreen()),
+              ),
+            ),
+          ],
         ),
         body: LayoutBuilder(
           builder: (context, constraints) {

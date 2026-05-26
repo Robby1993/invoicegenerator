@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:invoicegenerator/models/invoice.dart';
+import 'package:invoicegenerator/screens/billing_detail_screen.dart';
 import 'package:invoicegenerator/utils/responsive.dart';
 import 'package:provider/provider.dart';
 import '../providers/invoice_provider.dart';
@@ -80,6 +81,19 @@ class OrderHistoryScreen extends StatelessWidget {
                                         context,
                                         provider,
                                         invoice,
+                                      );
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.edit, size: 24.i),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => BillingDetailScreen(
+                                            invoice: invoice,
+                                          ),
+                                        ),
                                       );
                                     },
                                   ),

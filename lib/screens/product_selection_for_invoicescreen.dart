@@ -9,6 +9,8 @@ import '../models/invoice_item.dart';
 import 'invoice_confirm_screen.dart';
 
 class ProductSelectionForInvoiceScreen extends StatefulWidget {
+  final int? invoiceId;
+  final String? invoiceNo;
   final String challanNo;
   final String vehicleNo;
   final DateTime date;
@@ -17,9 +19,12 @@ class ProductSelectionForInvoiceScreen extends StatefulWidget {
   final double percent;
   final GstTransactionType gstType;
   final Customer customer;
+  final List<InvoiceItem>? existingItems;
 
   const ProductSelectionForInvoiceScreen({
     super.key,
+    this.invoiceId,
+    this.invoiceNo,
     required this.challanNo,
     required this.vehicleNo,
     required this.date,
@@ -28,6 +33,7 @@ class ProductSelectionForInvoiceScreen extends StatefulWidget {
     required this.percent,
     required this.customer,
     required this.gstType,
+    this.existingItems,
   });
 
   @override
@@ -37,7 +43,9 @@ class ProductSelectionForInvoiceScreen extends StatefulWidget {
 
 class _ProductSelectionForInvoiceScreenState
     extends State<ProductSelectionForInvoiceScreen> {
-  final List<InvoiceItem> _selectedItems = [];
+  late final List<InvoiceItem> _selectedItems = widget.existingItems != null 
+    ? List.from(widget.existingItems!) 
+    : [];
   final _searchController = TextEditingController();
   String _searchQuery = '';
 
@@ -283,6 +291,8 @@ class _ProductSelectionForInvoiceScreenState
       context,
       MaterialPageRoute(
         builder: (_) => InvoiceConfirmScreen(
+          invoiceId: widget.invoiceId,
+          invoiceNo: widget.invoiceNo,
           challanNo: widget.challanNo,
           vehicleNo: widget.vehicleNo,
           date: widget.date,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:invoicegenerator/models/invoice.dart';
+import 'package:invoicegenerator/models/invoice_item.dart';
 import 'package:invoicegenerator/screens/product_selection_for_invoicescreen.dart';
 import 'package:invoicegenerator/utils/responsive.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +9,8 @@ import '../models/customer.dart';
 import 'billing_detail_screen.dart';
 
 class CustomerSelectionScreen extends StatefulWidget {
+  final int? invoiceId;
+  final String? invoiceNo;
   final String challanNo;
   final String vehicleNo;
   final DateTime date;
@@ -15,9 +18,13 @@ class CustomerSelectionScreen extends StatefulWidget {
   final String lrNo;
   final double percent;
   final GstTransactionType gstType;
+  final Customer? existingCustomer;
+  final List<InvoiceItem>? existingItems;
 
   const CustomerSelectionScreen({
     super.key,
+    this.invoiceId,
+    this.invoiceNo,
     required this.challanNo,
     required this.vehicleNo,
     required this.date,
@@ -25,6 +32,8 @@ class CustomerSelectionScreen extends StatefulWidget {
     required this.lrNo,
     required this.percent,
     required this.gstType,
+    this.existingCustomer,
+    this.existingItems,
   });
 
   @override
@@ -46,6 +55,8 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
       context,
       MaterialPageRoute(
         builder: (_) => ProductSelectionForInvoiceScreen(
+          invoiceId: widget.invoiceId,
+          invoiceNo: widget.invoiceNo,
           challanNo: widget.challanNo,
           vehicleNo: widget.vehicleNo,
           date: widget.date,
@@ -54,6 +65,7 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
           percent: widget.percent,
           gstType: widget.gstType,
           customer: customer,
+          existingItems: widget.existingItems,
         ),
       ),
     );

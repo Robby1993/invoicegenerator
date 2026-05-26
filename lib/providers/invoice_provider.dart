@@ -85,4 +85,13 @@ class InvoiceProvider extends ChangeNotifier {
     notifyListeners(); // 🔥 REQUIRED
   }
 
+  Future<void> updateInvoice(Invoice invoice) async {
+    await _db.updateInvoice(invoice);
+    final index = invoices.indexWhere((i) => i.id == invoice.id);
+    if (index != -1) {
+      invoices[index] = invoice;
+      notifyListeners();
+    }
+  }
+
 }

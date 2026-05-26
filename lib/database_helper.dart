@@ -312,5 +312,44 @@ CREATE TABLE invoice_items (
     });
   }
 
+  Future<void> updateInvoice(Invoice invoice) async {
+    final db = await database;
+
+    await db.transaction((txn) async {
+      // 1. Update main invoice table
+      await txn.update(
+        'invoices',
+        invoice.toMap(),
+        where: 'id = ?',
+        whereArgs: [invoice.id],
+      );
+
+      // 2. Delete old items
+      await txn.delete(
+        'invoice_items',
+        where: 'invoiceId = ?',
+        whereArgs: [invoice.id],
+      );
+
+      // 3. Insert new items
+      for (final item in invoice.items) {
+        await txn.insert(
+          'invoice_items',
+          item.copyWith(invoiceId: invoice.id).toMap(),
+        );
+      }
+    });
+  }
+
+  Future<void> clearAllData() async {
+    final db = await database;
+    await db.transaction((txn) async {
+      await txn.delete('invoice_items');
+      await txn.delete('invoices');
+      await txn.delete('products');
+      await txn.delete('customers');
+    });
+  }
+
 
 }
